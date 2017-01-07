@@ -15,7 +15,7 @@ class paginate
 	{
 		try
 		{		
-			$time = date("Y-m-s H:i:s", time());
+			$time = date("Y-m-d H:i:s", time());
 			
 			$stmt = $this->db->prepare("INSERT INTO news(title, content, time) VALUES(:title, :content, :time)");
 			$stmt->bindparam(":title", $title);
@@ -36,7 +36,7 @@ class paginate
 	{
 		try
 		{		
-			$time = date("Y-m-s H:i:s", time());
+			$time = date("Y-m-d H:i:s", time());
 			
 			$stmt = $this->db->prepare("UPDATE news SET title=:title, content=:content, time=:time WHERE id=:id");
 			$stmt->bindparam(":title", $title);
