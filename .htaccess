@@ -1,0 +1,65 @@
+Options +FollowSymLinks
+RewriteEngine On
+
+RewriteCond %{SCRIPT_FILENAME} !-d
+RewriteCond %{SCRIPT_FILENAME} !-f
+
+RewriteRule ^users/register ./index.php?p=register
+RewriteRule ^users/login ./index.php?p=login
+RewriteRule ^users/logout ./index.php?p=logout
+RewriteRule ^users/lost/(.*)/(.*)/ ./index.php?p=lost&email=$1&code=$2
+RewriteRule ^users/lost/(.*)/(.*) ./index.php?p=lost&email=$1&code=$2
+RewriteRule ^users/lost ./index.php?p=lost
+
+RewriteRule ^news/(.*)/ index.php?page_no=$1
+RewriteRule ^news/(.*) index.php?page_no=$1
+RewriteRule ^news/ index.php
+RewriteRule ^news index.php
+
+RewriteRule ^read/(.*)/ index.php?p=read&no=$1
+RewriteRule ^read/(.*) index.php?p=read&no=$1
+
+RewriteRule ^ranking/players/(.*)/(.*)/ index.php?p=players&page_no=$1&player_name=$2
+RewriteRule ^ranking/players/(.*)/(.*) index.php?p=players&page_no=$1&player_name=$2
+RewriteRule ^ranking/players/(.*)/ index.php?p=players&page_no=$1
+RewriteRule ^ranking/players/(.*) index.php?p=players&page_no=$1
+RewriteRule ^ranking/players/ index.php?p=players
+RewriteRule ^ranking/players index.php?p=players
+
+RewriteRule ^ranking/guilds/(.*)/(.*)/ index.php?p=guilds&page_no=$1&guild_name=$2
+RewriteRule ^ranking/guilds/(.*)/(.*) index.php?p=guilds&page_no=$1&guild_name=$2
+RewriteRule ^ranking/guilds/(.*)/ index.php?p=guilds&page_no=$1
+RewriteRule ^ranking/guilds/(.*) index.php?p=guilds&page_no=$1
+RewriteRule ^ranking/guilds/ index.php?p=guilds
+RewriteRule ^ranking/guilds index.php?p=guilds
+
+RewriteRule ^user/delete/(.*)/ index.php?p=administration&code=$1
+RewriteRule ^user/delete/(.*) index.php?p=administration&code=$1
+RewriteRule ^user/password/(.*)/ index.php?p=password&code=$1
+RewriteRule ^user/password/(.*) index.php?p=password&code=$1
+RewriteRule ^user/email/(.*)/ index.php?p=email&code=$1
+RewriteRule ^user/email/(.*) index.php?p=email&code=$1
+RewriteRule ^user/email/ index.php?p=email&code=$1
+RewriteRule ^user/email index.php?p=email&code=$1
+RewriteRule ^user/email/(.*)/ index.php?p=email&code=$1
+RewriteRule ^user/email/(.*) index.php?p=email&code=$1
+RewriteRule ^user/administration ./index.php?p=administration
+RewriteRule ^user/characters ./index.php?p=characters
+
+RewriteRule ^admin/log/(.*)/(.*)/ index.php?p=admin&a=log&log=$1&page_no=$2
+RewriteRule ^admin/log/(.*)/(.*) index.php?p=admin&a=log&log=$1&page_no=$2
+
+RewriteRule ^admin/log/(.*)/ index.php?p=admin&a=log&log=$1
+RewriteRule ^admin/log/(.*) index.php?p=admin&a=log&log=$1
+
+RewriteRule ^admin/functions index.php?p=admin&a=functions
+
+RewriteRule ^admin/createitems index.php?p=admin&a=createitems
+
+RewriteRule ^admin/(.*)/ index.php?p=admin&a=$1
+RewriteRule ^admin/(.*) index.php?p=admin&a=$1
+RewriteRule ^admin/ index.php?p=admin
+RewriteRule ^admin index.php?p=admin
+
+RewriteRule ^download/ index.php?p=download
+RewriteRule ^download index.php?p=download

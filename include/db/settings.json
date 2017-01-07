@@ -1,0 +1,31 @@
+{
+   "general":{
+      "title":"Metin2 CMS",
+      "news":"5"
+   },
+   "links":{
+      "forum":"",
+      "support":"https:\/\/ionut.work\/contact",
+      "item-shop":""
+   },
+   "social-links":{
+      "youtube":"",
+      "facebook":"",
+      "twitter":"",
+      "tumblr":"",
+      "flickr":"",
+      "googleplus":"",
+      "rss":"",
+      "twitchtv":""
+   },
+   "download-links":{
+      "1":{
+         "name":"XXX",
+         "link":"http:\/\/"
+      },
+      "2":{
+         "name":"XXX",
+         "link":"http:\/\/"
+      }
+   }
+}
