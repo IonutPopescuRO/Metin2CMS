@@ -1,5 +1,5 @@
 <?php
-	if($page=="register" || $page=="lost" || $page="password")
+	if($page=="register" || $page=="lost" || $page=="password")
 	{
 		print '<script type="text/javascript">
 			var site_url = "'.$site_url.'";
