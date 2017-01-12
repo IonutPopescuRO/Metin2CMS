@@ -16,8 +16,12 @@
 			$a_page = 'createitems';
 			$a_title = $lang['create-items'];
 			break;
+		case 'download':
+			$a_page = 'download';
+			$a_title = $lang['download'];
+			break;
 		default:
 			$a_page = 'home';
-			$a_title = "Panou administrare";
+			$a_title = $lang['admin-panel'];
 	}
 ?>

@@ -1,4 +1,5 @@
 <?php
+	$site_general=getJsonSettings("", "general");
 	$links_header=getJsonSettings("", "links");
 	$links_footer=getJsonSettings("", "social-links");
 ?>
@@ -9,9 +10,18 @@
 
 <div class="container">
     <form action="" method="post">
+		<?php foreach($site_general as $name => $link) { ?>
+			<div class="form-group row">
+				<label for="<?php print $name; ?>" class="col-sm-2 col-form-label"><?php if($name=='news') print $lang['news-on-page']; else if($name=='title') print $lang['title']; else print ucfirst($name); ?></label>
+				<div class="col-sm-10">
+					<input type="<?php if($name=='news') print 'number'; else if($name=='title') print 'text'; else print 'url'; ?>" class="form-control" name="<?php print $name; ?>" placeholder="http://" value="<?php print $link; ?>">
+				</div>
+			</div>
+		<?php } ?>
+		
 		<?php foreach($links_header as $name => $link) { ?>
 			<div class="form-group row">
-				<label for="<?php print $name; ?>" class="col-sm-2 col-form-label"><?php print ucfirst($name); ?></label>
+				<label for="<?php print $name; ?>" class="col-sm-2 col-form-label"><?php if($name=='support') print $lang['support']; else print ucfirst($name); ?></label>
 				<div class="col-sm-10">
 					<input type="url" class="form-control" name="<?php print $name; ?>" placeholder="http://" value="<?php print $link; ?>">
 				</div>

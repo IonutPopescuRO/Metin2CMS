@@ -88,6 +88,10 @@
 			$database->doLogout();
 			header("Location: ".$site_url);
 			die();
+		} else if($current_page=="register")
+		{
+			$jsondataFunctions = file_get_contents('include/db/functions.json');
+			$jsondataFunctions = json_decode($jsondataFunctions, true);
 		} else if($page=='players')
 		{
 			if(isset($_POST['search']) && strlen($_POST['search'])>=3)
@@ -136,6 +140,10 @@
 		} else if($page=='lost')
 		{
 			include 'include/functions/lost.php';
+		} else if($page=='download')
+		{
+			$jsondataDownload = file_get_contents('include/db/download.json');
+			$jsondataDownload = json_decode($jsondataDownload, true);
 		}
 		redirect($page);
 
@@ -174,7 +182,15 @@
 					$edited = false;
 					
 					foreach($_POST as $key=>$link)
-						if(isset($jsondata['links'][$key]))
+						if(isset($jsondata['general'][$key]))
+						{
+							if($jsondata['general'][$key]!=$link)
+							{
+								$jsondata['general'][$key]=$link;
+								$edited = true;
+							}
+						}
+						else if(isset($jsondata['links'][$key]))
 						{
 							if($jsondata['links'][$key]!=$link)
 							{
@@ -195,7 +211,7 @@
 						$json_new = json_encode($jsondata);
 						file_put_contents('include/db/settings.json', $json_new);
 					}
-					header("Refresh:0");
+					header("Location: ".$site_url.'admin/links');
 					die();
 				}
 			}
@@ -207,6 +223,50 @@
 				$form_bonuses = '';
 				foreach($jsonBonuses as $bonus)
 					$form_bonuses .= '<option value='.$bonus['id'].'>'.str_replace("[n]", 'XXX', $bonus[$language_code]).'</option>';
+			}
+			else if($admin_page=='download')
+			{
+				$jsondataDownload = file_get_contents('include/db/download.json');
+				$jsondataDownload = json_decode($jsondataDownload, true);
+				
+				if(isset($_POST['submit']))
+				{
+					$new_link = array();
+					$new_link['name'] = $_POST['download_server'];
+					$new_link['link'] = $_POST['download_link'];
+					
+					array_push($jsondataDownload, $new_link);
+					
+					$json_new = json_encode($jsondataDownload);
+					file_put_contents('include/db/download.json', $json_new);
+					
+					header("Location: ".$site_url.'admin/download');
+					die();
+				} else if(isset($_GET['del']))
+				{
+					unset($jsondataDownload[$_GET['del']]);
+					
+					$json_new = json_encode($jsondataDownload);
+					file_put_contents('include/db/download.json', $json_new);
+					
+					header("Location: ".$site_url.'admin/download');
+					die();
+				}
+			}
+			else if($admin_page=='functions')
+			{
+				$jsondataFunctions = file_get_contents('include/db/functions.json');
+				$jsondataFunctions = json_decode($jsondataFunctions, true);
+
+				if(isset($_POST['submit']))
+				{
+					$jsondataFunctions['active-registrations'] = $_POST['active-registrations'];
+					$json_new = json_encode($jsondataFunctions);
+					file_put_contents('include/db/functions.json', $json_new);
+					
+					header("Location: ".$site_url.'admin/functions');
+					die();
+				}
 			}
 		}
 		

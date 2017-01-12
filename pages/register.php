@@ -1,12 +1,13 @@
 <div class="container">
     <div class="row">
         <div class="col-xs-12 col-sm-11 col-md-12 col-sm-offset-2 col-md-offset-3">
-            <form role="form" method="post" action="">
-				<div class="page-hd" style="background-image: url(<?php print $site_url; ?>images/user.png)">
-					<div class="bd-c">
-						<h2 class="pre-social"><?php print $lang['register']; ?></h2>
-					</div>
+			<div class="page-hd" style="background-image: url(<?php print $site_url; ?>images/user.png)">
+				<div class="bd-c">
+					<h2 class="pre-social"><?php print $lang['register']; ?></h2>
 				</div>
+			</div>
+		<?php if($jsondataFunctions['active-registrations']==1) { ?>
+            <form role="form" method="post" action="">
 				<?php
 					include 'include/functions/register.php';
 					
@@ -47,6 +48,11 @@
 				<hr>
 				<input type="submit" value="<?php print $lang['register']; ?>" class="btn btn-danger btn-lg btn-block" tabindex="7">
             </form>
+		<?php } else { ?>
+			<div class="alert alert-info" role="alert">
+				<strong>Info!</strong> <?php print $lang['disabled-registrations']; ?>
+			</div>
+		<?php } ?>
         </div>
     </div>
 

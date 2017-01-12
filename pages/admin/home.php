@@ -6,8 +6,12 @@
 		<i class="fa fa-cogs fa-1" aria-hidden="true"></i> <?php print $lang['general-settings']; ?>
 	</li>
 	<a href="admin/links" class="list-group-item list-group-item-action">
-		<h5 class="list-group-item-heading"><i class="fa fa-cog fa-1" aria-hidden="true"></i> <?php print $lang['edit-links']; ?></h5>
+		<h5 class="list-group-item-heading"><i class="fa fa-cog fa-1" aria-hidden="true"></i> <?php print $lang['edit-info']; ?></h5>
 		<p class="list-group-item-text"><?php print $lang['edit-links-info']; ?></p>
+	</a>
+	<a href="admin/download" class="list-group-item list-group-item-action">
+		<h5 class="list-group-item-heading"><i class="fa fa-download fa-1" aria-hidden="true"></i> <?php print $lang['download']; ?></h5>
+		<p class="list-group-item-text"><?php print $lang['download-links']; ?></p>
 	</a>
 	<a href="admin/functions" class="list-group-item list-group-item-action">
 		<h5 class="list-group-item-heading"><i class="fa fa-check-square-o fa-1" aria-hidden="true"></i> <?php print $lang['functions-on-off']; ?></h5>

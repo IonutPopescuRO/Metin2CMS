@@ -1,6 +1,3 @@
-<?php
-	$download_links=getJsonSettings("", "download-links");
-?>
 <div class="container">
 	<div class="page-hd" style="background-image: url(<?php print $site_url; ?>images/user.png)">
 		<div class="bd-c">
@@ -8,7 +5,7 @@
 		</div>
 	</div>
 	
-	<?php if(count($download_links)) { ?>
+	<?php if(count($jsondataDownload)) { ?>
 	<table class="table table-hover">
 		<thead class="thead-inverse">
 			<tr>
@@ -18,9 +15,9 @@
 			</tr>
 		</thead>
 		<tbody>
-		<?php foreach($download_links as $key => $download) { ?>
+		<?php $i=1; foreach($jsondataDownload as $key => $download) { ?>
 			<tr>
-				<th scope="row"><?php print $key++; ?></th>
+				<th scope="row"><?php print $i++; ?></th>
 				<td><?php print $download['name']; ?></td>
 				<td><a href="<?php print $download['link']; ?>" class="btn btn-primary btn-sm"><?php print $lang['download']; ?></a></td>
 			</tr>
