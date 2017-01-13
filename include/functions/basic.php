@@ -343,7 +343,10 @@
 		foreach($list as $player)
 		{
 			$position = array_search($player['name'], array_column($result, 'name'));
-			$ranking[$player['name']] = $position + 1;
+			if(strpos($player['name'], '[')!== false)
+				$ranking[$player['name']] = '<i class="fa fa-times fa-1" aria-hidden="true"></i>';
+			else
+				$ranking[$player['name']] = $position + 1;
 		}
 		
 		return $ranking;
