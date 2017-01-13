@@ -82,8 +82,10 @@
 		global $database;
 		
 		$banned_ids = getBannedAccounts();
-		
-		$stmt = $database->runQueryPlayer("SELECT id, name, account_id FROM player WHERE name NOT LIKE '[%]%' AND account_id NOT IN (".$banned_ids.") ORDER BY level DESC, exp DESC, name ASC limit 10");
+		if($banned_ids)
+			$stmt = $database->runQueryPlayer("SELECT id, name, account_id FROM player WHERE name NOT LIKE '[%]%' AND account_id NOT IN (".$banned_ids.") ORDER BY level DESC, exp DESC, name ASC limit 10");
+		else
+			$stmt = $database->runQueryPlayer("SELECT id, name, account_id FROM player WHERE name NOT LIKE '[%]%' ORDER BY level DESC, exp DESC, name ASC limit 10");
 		$stmt->execute();
 		$top = $stmt->fetchAll();
 		
@@ -329,7 +331,10 @@
 		
 		$banned_ids = getBannedAccounts();
 
-		$stmt = $database->runQueryPlayer("SELECT name FROM player WHERE name NOT LIKE '[%]%' AND account_id NOT IN (".$banned_ids.") ORDER BY level DESC, exp DESC, name ASC");
+		if($banned_ids)
+			$stmt = $database->runQueryPlayer("SELECT name FROM player WHERE name NOT LIKE '[%]%' AND account_id NOT IN (".$banned_ids.") ORDER BY level DESC, exp DESC, name ASC");
+		else
+			$stmt = $database->runQueryPlayer("SELECT name FROM player WHERE name NOT LIKE '[%]%' ORDER BY level DESC, exp DESC, name ASC");
 		$stmt->execute();
 		$result = $stmt->fetchAll();
 
