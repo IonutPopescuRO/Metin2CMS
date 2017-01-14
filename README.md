@@ -1,6 +1,6 @@
 Metin2CMS
 =========
-[![N|Solid](http://i.imgur.com/dS8151Q.png)](https://metin2cms.cf/)
+[![N|Solid](http://i.imgur.com/dS8151Q.png)](https://metin2cms.cf/v2)
 
 The latest version of the CMS. This CMS is Open-Source and is accompanied by updates. To update to a newer version, enter in administrator panel.
 
