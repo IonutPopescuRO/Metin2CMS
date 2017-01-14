@@ -10,10 +10,18 @@ REQUIREMENTS
 
 The minimum requirement by Metin2CMS that your Web server supports PHP 5.6.0.
 
-Communication with the database of the cms is done using the PDO extension. Settings are saved in json files. The platform is available in 2 languages:
+MySQL CONNECTION
+------------
+
+Communication with the database of the cms is done using the PDO extension. Settings are saved in json files. 
+
+LANGUAGES
+------------
+The platform is available in 2 languages:
 
   - English
   - Română
+If you want to help, you can translate in your language and send us.
 
 INSTALATION
 ------------
