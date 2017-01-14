@@ -4,12 +4,19 @@ Metin2CMS
 
 The latest version of the CMS. This CMS is Open-Source and is accompanied by updates. To update to a newer version, enter in administrator panel.
 
+
+REQUIREMENTS
+------------
+
+The minimum requirement by Metin2CMS that your Web server supports PHP 5.6.0.
+
 Communication with the database of the cms is done using the PDO extension. Settings are saved in json files. The platform is available in 2 languages:
 
   - English
   - Română
 
-### Installation
+INSTALATION
+------------
 
 **All you have to do now is to edit the file `config.php`.**
 
