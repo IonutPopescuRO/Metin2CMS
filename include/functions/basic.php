@@ -928,6 +928,13 @@
 		else return false;
 	}
 	
+	function check_item_sash($id)
+	{
+		if($id > 85000 && $id < 90000)
+			return true;
+		else return false;
+	}
+	
 	function get_account_by_char($name)
 	{
 		global $database;
