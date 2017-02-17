@@ -216,7 +216,7 @@
 	{
 		global $database;
 		
-		$stmt = $database->runQueryPlayer("SELECT name, master FROM guild ORDER BY level DESC, ladder_point DESC, exp DESC, name ASC limit 10");
+		$stmt = $database->runQueryPlayer("SELECT name, master FROM guild WHERE name NOT LIKE '[%]%' ORDER BY level DESC, ladder_point DESC, exp DESC, name ASC limit 10");
 		$stmt->execute();
 		$top = $stmt->fetchAll();
 		
