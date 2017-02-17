@@ -45,11 +45,11 @@
 
 				if(isset($search))
 				{
-					$query = "SELECT id, name, master, level, ladder_point FROM guild WHERE name LIKE :search ORDER BY level DESC, ladder_point DESC, exp DESC, name ASC";
+					$query = "SELECT id, name, master, level, ladder_point FROM guild WHERE name NOT LIKE '[%]%' AND name LIKE :search ORDER BY level DESC, ladder_point DESC, exp DESC, name ASC";
 					$newquery = $paginate->paging($query,$records_per_page);
 					$paginate->dataview($newquery, $search);
 				} else {
-					$query = "SELECT id, name, master, level, ladder_point FROM guild ORDER BY level DESC, ladder_point DESC, exp DESC, name ASC";
+					$query = "SELECT id, name, master, level, ladder_point FROM guild WHERE name NOT LIKE '[%]%' ORDER BY level DESC, ladder_point DESC, exp DESC, name ASC";
 					$newquery = $paginate->paging($query,$records_per_page);
 					$paginate->dataview($newquery);
 				}

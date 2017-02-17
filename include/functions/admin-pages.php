@@ -20,6 +20,10 @@
 			$a_page = 'download';
 			$a_title = $lang['download'];
 			break;
+		case 'vote4coins':
+			$a_page = 'vote4coins';
+			$a_title = 'Vote4Coins';
+			break;
 		default:
 			$a_page = 'home';
 			$a_title = $lang['admin-panel'];

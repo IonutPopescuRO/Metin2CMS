@@ -140,6 +140,16 @@ $lang = array(
 	'title' => 'Titlu',
 	'news-on-page' => 'Noutăți pe pagină',
 	'active-registrations' => 'Înregistrări active?',
-	'disabled-registrations' => 'Momentan înregistrările sunt dezactivate.'
+	'disabled-registrations' => 'Momentan înregistrările sunt dezactivate.',
+	
+	//v2.4
+	'vote' => 'Votează',
+	'coin' => 'Monedă',
+	'value' => 'Valoare',
+	'time' => 'Timp',
+	'hours' => 'ore',
+	'minutes' => 'minute',
+	'vote-again' => 'Poți vota din nou în:',
+	'vote-info' => 'Puteți adăuga site-uri de votare și recompense pentru accesarea acestora.'
 	);
 ?>

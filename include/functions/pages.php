@@ -52,6 +52,10 @@
 			$page = 'email';
 			$title = $lang['change-email'];
 			break;
+		case 'vote4coins':
+			$page = 'vote4coins';
+			$title = 'Vote4Coins';
+			break;
 		default:
 			$page = 'news';
 			$title = $lang['news'];

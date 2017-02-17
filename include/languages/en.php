@@ -140,6 +140,16 @@ $lang = array(
 	'title' => 'Title',
 	'news-on-page' => 'News on page',
 	'active-registrations' => 'Active registrations?',
-	'disabled-registrations' => 'Currently registrations are disabled.'
+	'disabled-registrations' => 'Currently registrations are disabled.',
+	
+	//v2.4
+	'vote' => 'Vote',
+	'coin' => 'Coin',
+	'value' => 'Value',
+	'time' => 'Time',
+	'hours' => 'hours',
+	'minutes' => 'minutes',
+	'vote-again' => 'You can vote again in:',
+	'vote-info' => 'You can add voting sites and rewards for accessing them.'
 	);
 ?>

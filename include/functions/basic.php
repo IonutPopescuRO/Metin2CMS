@@ -4,7 +4,7 @@
 		global $database;
 		global $site_url;
 		
-		$pages = array("administration", "characters", "password", "email");
+		$pages = array("administration", "characters", "password", "email", "vote4coins");
 		if (in_array($url, $pages) && !$database->is_loggedin())
 		{
 			header("Location: ".$site_url."users/login");
@@ -83,9 +83,9 @@
 		
 		$banned_ids = getBannedAccounts();
 		if($banned_ids)
-			$stmt = $database->runQueryPlayer("SELECT id, name, account_id FROM player WHERE name NOT LIKE '[%]%' AND account_id NOT IN (".$banned_ids.") ORDER BY level DESC, exp DESC, name ASC limit 10");
+			$stmt = $database->runQueryPlayer("SELECT id, name, account_id FROM player WHERE name NOT LIKE '[%]%' AND account_id NOT IN (".$banned_ids.") ORDER BY level DESC, exp DESC, playtime DESC, name ASC limit 10");
 		else
-			$stmt = $database->runQueryPlayer("SELECT id, name, account_id FROM player WHERE name NOT LIKE '[%]%' ORDER BY level DESC, exp DESC, name ASC limit 10");
+			$stmt = $database->runQueryPlayer("SELECT id, name, account_id FROM player WHERE name NOT LIKE '[%]%' ORDER BY level DESC, exp DESC, playtime DESC, name ASC limit 10");
 		$stmt->execute();
 		$top = $stmt->fetchAll();
 		
@@ -1044,5 +1044,136 @@
 		
 		foreach($chars as $char)
 			delete_char($char['id']);
+			
+		$stmt = $database->runQuerySqlite('DELETE FROM delete_account WHERE account_id = ?');
+		$stmt->bindParam(1, $id, PDO::PARAM_INT);
+		$stmt->execute();
+	}
+	
+	function delete_vote4coins($id)
+	{
+		global $database;
+		
+		$stmt = $database->runQuerySqlite('DELETE FROM vote4coins WHERE site = ?');
+		$stmt->bindParam(1, $id, PDO::PARAM_INT);
+		$stmt->execute();	
+	}
+	
+	function check_vote4coins($key, $id)
+	{
+		global $database;
+
+		$stmt = $database->runQuerySqlite("SELECT site FROM vote4coins WHERE site = ? AND account_ip = ?");
+		$stmt->bindParam(1, $id, PDO::PARAM_INT);
+		$stmt->bindParam(2, $key, PDO::PARAM_STR);
+		$stmt->execute();
+		$check = $stmt->fetchAll();
+
+		if(count($check))
+			return true;
+		else return false;
+	}
+	
+	function insert_vote4coins($id, $ip)
+	{
+		global $database;
+		
+		$date = date('Y-m-d G:i');
+		$account = $_SESSION['id'];
+		
+		$stmt = $database->runQuerySqlite("INSERT INTO vote4coins (site, account_id, account_ip, date) VALUES (:site, :account_id, :account_ip, :date)");
+		$stmt->execute(array(':date'=>$date, ':account_id'=>$account, ':account_ip'=>$ip, ':site'=>$id));
+	}
+	
+	function check_date_vote4coins($id, $ip)
+	{
+		global $database;
+		
+		$stmt = $database->runQuerySqlite("SELECT date FROM vote4coins WHERE site = ? AND account_ip = ?");
+		$stmt->bindParam(1, $id, PDO::PARAM_INT);
+		$stmt->bindParam(2, $ip, PDO::PARAM_STR);
+		$stmt->execute();
+		$result = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+		return $result[0];
+	}
+	
+	function check_date_vote4coins_account($id)
+	{
+		global $database;
+		
+		$stmt = $database->runQuerySqlite("SELECT date FROM vote4coins WHERE site = ? AND account_id = ?");
+		$stmt->bindParam(1, $id, PDO::PARAM_INT);
+		$stmt->bindParam(2, $_SESSION['id'], PDO::PARAM_INT);
+		$stmt->execute();
+		$result = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+		return $result[0];
+	}
+	
+	function get_account_ip() {
+		$ipaddress = getenv('HTTP_CLIENT_IP')?:
+			getenv('HTTP_X_FORWARDED_FOR')?:
+			getenv('HTTP_X_FORWARDED')?:
+			getenv('HTTP_FORWARDED_FOR')?:
+			getenv('HTTP_FORWARDED')?:
+			getenv('REMOTE_ADDR');
+		return $ipaddress;
+	}
+	
+	function sqlite_check_table($table)
+	{
+		global $database;
+		
+		try {
+			$result = $database->runQuerySqlite("SELECT 1 FROM $table LIMIT 1");
+		} catch (Exception $e) {
+			return FALSE;
+		}
+
+		return $result !== FALSE;
+	}
+	
+	function sqlite_create_table($sql)
+	{
+		global $database;
+
+		if($database->execQuerySqlite($sql))
+			return true;
+		return false;
+	}
+	
+	function addCoins($account_id, $coins)
+	{
+		global $database;
+
+		$stmt = $database->runQueryAccount("UPDATE account SET coins = coins + ? WHERE id = ?");
+		$stmt->bindParam(1, $coins, PDO::PARAM_INT);
+		$stmt->bindParam(2, $account_id, PDO::PARAM_INT);
+		$stmt->execute();
+	}
+	
+	function addjCoins($account_id, $coins)
+	{
+		global $database;
+
+		$stmt = $database->runQueryAccount("UPDATE account SET jcoins = jcoins + ? WHERE id = ?");
+		$stmt->bindParam(1, $coins, PDO::PARAM_INT);
+		$stmt->bindParam(2, $account_id, PDO::PARAM_INT);
+		$stmt->execute();
+	}
+	
+	function updateVote4Coins($site, $ip)
+	{
+		global $database;
+		
+		$date = date('Y-m-d G:i');
+
+		$stmt = $database->runQuerySqlite("UPDATE vote4coins SET account_ip = ?, date = ? WHERE site = ? AND account_id = ?");
+		$stmt->bindParam(1, $ip, PDO::PARAM_STR);
+		$stmt->bindParam(2, $date, PDO::PARAM_STR);
+		$stmt->bindParam(3, $site, PDO::PARAM_INT);
+		$stmt->bindParam(4, $_SESSION['id'], PDO::PARAM_INT);
+		$stmt->execute();
 	}
 ?>

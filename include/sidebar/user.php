@@ -33,7 +33,13 @@
 				<a href="<?php print $site_url; ?>user/characters" class="list-group-item list-group-item-action"><?php print $lang['chars-list']; ?></a>
 				<?php if($item_shop!="") { ?>
 				<a target='_blank' href="<?php print $item_shop; ?>" class="list-group-item list-group-item-action"><?php print $lang['item-shop']; ?></a>
-				<?php } ?>
+				<?php }
+					$vote4coins = file_get_contents('include/db/vote4coins.json');
+					$vote4coins = json_decode($vote4coins, true);
+					
+					if(count($vote4coins))
+						print '<a href="'.$site_url.'user/vote4coins" class="list-group-item list-group-item-action">Vote4Coins</a>';
+				?>
 				<a href="<?php print $site_url; ?>users/logout" class="list-group-item list-group-item-action list-group-item-danger"><?php print $lang['logout']; ?></a>
 				<?php if($web_admin) { ?>
 				<a href="#" class="list-group-item list-group-item-action disabled">web_admin <?php print $web_admin; ?></a>

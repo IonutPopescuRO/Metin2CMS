@@ -45,6 +45,12 @@ class USER
 		return $stmt;
 	}
 	
+	public function execQuerySqlite($sql)
+	{
+		$stmt = $this->sqlite->exec($sql);
+		return $stmt;
+	}
+	
 	public function runQueryLog($sql)
 	{
 		$stmt = $this->log->prepare($sql);
