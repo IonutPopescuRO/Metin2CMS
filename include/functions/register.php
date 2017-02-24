@@ -1,5 +1,5 @@
 ﻿<?php
-	if(isset($_POST['captcha']) && isset($_POST['username']) && isset($_POST['password']) && isset($_POST['email']))
+	if(isset($_POST['captcha']) && isset($_POST['username']) && isset($_POST['password']) && isset($_POST['rpassword']) && isset($_POST['email']) && isset($_SESSION['captcha']['code']))
 	{
 		$errors = array();
 		if($_POST['captcha'] != $_SESSION['captcha']['code'])

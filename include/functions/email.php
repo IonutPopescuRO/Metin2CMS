@@ -12,7 +12,7 @@
 		} else {
 			$message = 5;
 		}
-	} else if(isset($_POST['email']) && isset($_POST['captcha']))
+	} else if(isset($_POST['email']) && isset($_POST['captcha']) && isset($_SESSION['captcha_email']['code']))
 	{
 		if($_POST['captcha'] == $_SESSION['captcha_email']['code'])
 		{

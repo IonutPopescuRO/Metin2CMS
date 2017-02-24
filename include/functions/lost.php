@@ -23,7 +23,7 @@
 		} else {
 			$message = 6;
 		}
-	} else if(isset($_POST['username']) && isset($_POST['email']) && isset($_POST['captcha']))
+	} else if(isset($_POST['username']) && isset($_POST['email']) && isset($_POST['captcha']) && isset($_SESSION['captcha_lost']['code']))
 	{
 		if($_POST['captcha'] == $_SESSION['captcha_lost']['code'])
 		{
