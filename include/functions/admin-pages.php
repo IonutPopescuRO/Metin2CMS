@@ -24,6 +24,22 @@
 			$a_page = 'vote4coins';
 			$a_title = 'Vote4Coins';
 			break;
+		case 'players':
+			$a_page = 'players';
+			$a_title = $lang['player-management'];
+			break;
+		case 'player_edit':
+			$a_page = 'player_edit';
+			$a_title = $lang['edit-player-info'];
+			break;
+		case 'modules':
+			$a_page = 'modules';
+			$a_title = $lang['modules-management'];
+			break;
+		case 'themes':
+			$a_page = 'themes';
+			$a_title = $lang['themes'];
+			break;
 		default:
 			$a_page = 'home';
 			$a_title = $lang['admin-panel'];

@@ -95,6 +95,7 @@
                         <div class="bd-c">
                             <ul>
 								<?php include 'include/sidebar/user.php'; ?>
+								<?php if(!$offline && $statistics) include 'include/sidebar/statistics.php'; ?>
 								<?php include 'include/sidebar/ranking.php'; ?>
                             </ul>
                         </div>

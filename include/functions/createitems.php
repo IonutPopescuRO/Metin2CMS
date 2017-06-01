@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 	if(isset($_POST['add']))
 	{
 		$account_id = get_account_by_char($_POST['name']);

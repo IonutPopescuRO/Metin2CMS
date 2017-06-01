@@ -1,3 +1,9 @@
 {
-   "active-registrations":"1"
+   "active-registrations":"1",
+   "players-online":"0",
+   "accounts-created":"0",
+   "created-characters":"0",
+   "guilds-created":"0",
+   "offline-shops":"0",
+   "players-online-last-24h":"0"
 }

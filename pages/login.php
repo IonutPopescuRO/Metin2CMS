@@ -14,7 +14,7 @@
 						  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						  </button>';
-						switch ($login_info) {
+						switch ($login_info[0]) {
 							case 1:
 								print 'logged';
 								break;
@@ -27,10 +27,19 @@
 							case 4:
 								print $lang['error-login-email'];
 								break;
+							case 5:
+								print $lang['account-blocked-temporary'].' ('.$login_info[2].')';
+								break;
 							default:
 								print 'ERROR';
 						}
 						print '</div>';
+						
+						if($login_info[0]==2 || $login_info[0]==5)
+						print '<div class="alert alert-info alert-dismissible fade in" role="alert">
+						  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						  </button>'.$lang['reason'].': '.$login_info[1].'</div>';
 					}
 				?>
 				<table class="table table-hover">
@@ -54,7 +63,7 @@
 					<p><a href="<?php print $site_url; ?>users/register"><?php print $lang['register']; ?></a></p>
 				</div>
 				<div class="col-md-6">
-					<p style="text-align: right"><a href="<?php print $site_url; ?>users/forgot"><?php print $lang['forget-password']; ?></a></p>
+					<p style="text-align: right"><a href="<?php print $site_url; ?>users/lost"><?php print $lang['forget-password']; ?></a></p>
 				</div>
 			</div>
         </div>

@@ -60,6 +60,16 @@ RewriteRule ^admin/functions index.php?p=admin&a=functions
 
 RewriteRule ^admin/createitems index.php?p=admin&a=createitems
 
+RewriteRule ^admin/players/(.*)/(.*)/ index.php?p=admin&a=players&page_no=$1&player_name=$2
+RewriteRule ^admin/players/(.*)/(.*) index.php?p=admin&a=players&page_no=$1&player_name=$2
+RewriteRule ^admin/players/(.*)/ index.php?p=admin&a=players&page_no=$1
+RewriteRule ^admin/players/(.*) index.php?p=admin&a=players&page_no=$1
+RewriteRule ^admin/players/ index.php?p=admin&a=players
+RewriteRule ^admin/players index.php?p=admin&a=players
+
+RewriteRule ^admin/player/edit/(.*)/ index.php?p=admin&a=player_edit&id=$1
+RewriteRule ^admin/player/edit/(.*) index.php?p=admin&a=player_edit&id=$1
+
 RewriteRule ^admin/vote4coins/(.*)/ index.php?p=admin&a=vote4coins&del=$1
 RewriteRule ^admin/vote4coins/(.*) index.php?p=admin&a=vote4coins&del=$1
 RewriteRule ^admin/download/(.*)/ index.php?p=admin&a=download&del=$1

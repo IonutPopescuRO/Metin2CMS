@@ -1074,6 +1074,21 @@
 		else return false;
 	}
 	
+	function check_vote4coins_by_account($id)
+	{
+		global $database;
+
+		$stmt = $database->runQuerySqlite("SELECT site FROM vote4coins WHERE site = ? AND account_id= ?");
+		$stmt->bindParam(1, $id, PDO::PARAM_INT);
+		$stmt->bindParam(2,  $_SESSION['id'], PDO::PARAM_INT);
+		$stmt->execute();
+		$check = $stmt->fetchAll();
+
+		if(count($check))
+			return true;
+		else return false;
+	}
+	
 	function insert_vote4coins($id, $ip)
 	{
 		global $database;
@@ -1175,5 +1190,368 @@
 		$stmt->bindParam(3, $site, PDO::PARAM_INT);
 		$stmt->bindParam(4, $_SESSION['id'], PDO::PARAM_INT);
 		$stmt->execute();
+	}
+	
+	//2.6
+	function check_table_in_player($table)
+	{
+		global $database;
+		
+		$stmt = $database->runQueryPlayer("SHOW TABLES LIKE ?");
+		$stmt->bindParam(1, $table, PDO::PARAM_STR);
+		$stmt->execute(); 
+		$result = $stmt->fetchAll(PDO::FETCH_COLUMN);
+		
+		if(count($result))
+			return true;
+		else return false;
+	}
+	
+	function countOnlinePlayers_minute($m)
+	{
+		global $database;
+		
+		$stmt = $database->runQueryPlayer("SELECT count(*) FROM player WHERE DATE_SUB(NOW(), INTERVAL ? MINUTE) < last_play");
+		$stmt->bindParam(1, $m, PDO::PARAM_INT);
+		$stmt->execute(); 
+		$count = $stmt->fetchColumn(); 
+
+		return $count;
+	}
+	
+	function countOnlinePlayers_days($d)
+	{
+		global $database;
+		
+		$stmt = $database->runQueryPlayer("SELECT count(*) FROM player WHERE DATE_SUB(NOW(), INTERVAL ? DAY) < last_play");
+		$stmt->bindParam(1, $d, PDO::PARAM_INT);
+		$stmt->execute(); 
+		$count = $stmt->fetchColumn(); 
+
+		return $count;
+	}
+	
+	function getCharsTotalNumber()
+	{
+		global $database;
+		
+		$stmt = $database->runQueryPlayer("SELECT count(*) FROM player"); 
+		$stmt->execute(); 
+		$count = $stmt->fetchColumn(); 
+
+		return $count;
+	}
+	
+	function getAccountsTotalNumber()
+	{
+		global $database;
+		
+		$stmt = $database->runQueryAccount("SELECT count(*) FROM account"); 
+		$stmt->execute(); 
+		$count = $stmt->fetchColumn(); 
+
+		return $count;
+	}
+	
+	function getGuildsTotalNumber()
+	{
+		global $database;
+		
+		$stmt = $database->runQueryPlayer("SELECT count(*) FROM guild"); 
+		$stmt->execute(); 
+		$count = $stmt->fetchColumn(); 
+
+		return $count;
+	}
+	
+	function getOfflineShopsTotalNumber()
+	{
+		global $database;
+		
+		if(!check_table_in_player('offline_shop_npc'))
+			return 0;
+		else
+		{
+			$stmt = $database->runQueryPlayer("SELECT count(*) FROM offline_shop_npc"); 
+			$stmt->execute(); 
+			$count = $stmt->fetchColumn(); 
+
+			return $count;
+		}
+		return 5;
+	}
+	
+	function getStatistics($key)
+	{
+		switch ($key) {
+			case 'players-online':
+				return countOnlinePlayers_minute(5);
+				break;
+			case 'accounts-created':
+				return getAccountsTotalNumber();
+				break;
+			case 'created-characters':
+				return getCharsTotalNumber();
+				break;
+			case 'guilds-created':
+				return getGuildsTotalNumber();
+				break;
+			case 'offline-shops':
+				return getOfflineShopsTotalNumber();
+				break;
+			case 'players-online-last-24h':
+				return countOnlinePlayers_days(1);
+				break;
+			default:
+				return "ERROR";
+		}
+	}
+	
+	function checkStatus($id)
+	{
+		global $database;
+		
+		$stmt = $database->runQueryAccount("SELECT status FROM account WHERE id=:id");
+		$stmt->bindParam(':id', $id, PDO::PARAM_INT);
+		$stmt->execute();
+		$result=$stmt->fetch(PDO::FETCH_ASSOC);
+		
+		if($result['status']=="OK")
+			return 1;
+		else return 0;
+	}
+	
+	function check_account_column($name)
+	{
+		global $database;
+		
+		$sth = $database->runQueryAccount("DESCRIBE account");
+		$sth->execute();
+		$columns = $sth->fetchAll(PDO::FETCH_COLUMN);
+		
+		if(in_array($name, $columns))
+			return true;
+		else return false;
+	}
+	
+	function check_availDt($id)
+	{
+		global $database;
+		
+		$stmt = $database->runQueryAccount("SELECT availDt FROM account WHERE id=:id");
+		$stmt->bindParam(':id', $id, PDO::PARAM_INT);
+		$stmt->execute();
+		$result=$stmt->fetch(PDO::FETCH_ASSOC);
+		
+		if($result['availDt'] != "0000-00-00 00:00:00")
+		{	
+			$date1 = new DateTime("now");
+			$date2 = new DateTime($result['availDt']);
+			if($date1 < $date2)
+				return 1;//banned
+		} else return 0;
+		
+		return 0;
+	}
+	
+	function get_availDt($id)
+	{
+		global $database;
+		
+		$stmt = $database->runQueryAccount("SELECT availDt FROM account WHERE id=:id");
+		$stmt->bindParam(':id', $id, PDO::PARAM_INT);
+		$stmt->execute();
+		$result=$stmt->fetch(PDO::FETCH_ASSOC);
+		
+		return $result['availDt'];
+	}
+	
+	function banPermanent($id, $reason)
+	{
+		global $database;
+		
+		$now_time = date('Y-m-d H:i:s');
+		$status = 'BLOCK';
+		
+		$stmt = $database->runQuerySqlite("INSERT INTO ban_log (account_id, date, reason) VALUES (:id, :date, :reason)");
+		$stmt->execute(array(':date'=>$now_time, ':id'=>$id, ':reason'=>$reason));
+		
+		$stmt = $database->runQueryAccount("UPDATE account SET status = ? WHERE id = ?");
+		$stmt->bindParam(1, $status, PDO::PARAM_STR);
+		$stmt->bindParam(2, $id, PDO::PARAM_INT);
+		$stmt->execute();
+	}
+	
+	function getLastBanReason($id)
+	{
+		global $database;
+		
+		$stmt = $database->runQuerySqlite('SELECT reason, date FROM ban_log WHERE account_id = ? ORDER BY id DESC LIMIT 1');
+		$stmt->bindParam(1, $id, PDO::PARAM_INT);
+		$stmt->execute();
+		$result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+		if($result)
+			return $result['date'].'</br>'.$result['reason'];
+		else return '';
+	}
+	
+	function getLoginLastBanReason($id)
+	{
+		global $database;
+		
+		$stmt = $database->runQuerySqlite('SELECT reason FROM ban_log WHERE account_id = ? ORDER BY id DESC LIMIT 1');
+		$stmt->bindParam(1, $id, PDO::PARAM_INT);
+		$stmt->execute();
+		$result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+		if($result)
+			return $result['reason'];
+		else return '';
+	}
+	
+	function unBan($id)
+	{
+		global $database;
+		
+		$status = 'OK';
+		
+		$stmt = $database->runQueryAccount("UPDATE account SET status = ? WHERE id = ?");
+		$stmt->bindParam(1, $status, PDO::PARAM_STR);
+		$stmt->bindParam(2, $id, PDO::PARAM_INT);
+		$stmt->execute();
+		
+		if(check_account_column('availDt'))
+		{
+			$reset_availDt = "0000-00-00 00:00:00";
+			
+			$stmt = $database->runQueryAccount("UPDATE account SET availDt = ? WHERE id = ?");
+			$stmt->bindParam(1, $reset_availDt, PDO::PARAM_STR);
+			$stmt->bindParam(2, $id, PDO::PARAM_INT);
+			$stmt->execute();
+		}
+	}
+
+	function banTemporary($id, $reason, $time_availDt)
+	{
+		global $database;
+		
+		$now_time = date('Y-m-d H:i:s');
+		
+		$stmt = $database->runQuerySqlite("INSERT INTO ban_log (account_id, date, reason) VALUES (:id, :date, :reason)");
+		$stmt->execute(array(':date'=>$now_time, ':id'=>$id, ':reason'=>$reason));
+		
+		$date = date('Y-m-d H:i:s', $time_availDt);
+
+		$stmt = $database->runQueryAccount("UPDATE account SET availDt = ? WHERE id = ?");
+		$stmt->bindParam(1, $date, PDO::PARAM_STR);
+		$stmt->bindParam(2, $id, PDO::PARAM_INT);
+		$stmt->execute();
+	}
+	
+	function check_char($id)
+	{
+		global $database;
+		
+		$stmt = $database->runQueryPlayer("SELECT id FROM player WHERE id=:id LIMIT 1");
+		$stmt->execute(array(':id'=>$id));
+		
+		$userRow=$stmt->fetch(PDO::FETCH_ASSOC);
+		if($stmt->rowCount() == 1)
+			return true;
+		else return false;
+	}
+	
+	function getCharColumns($table)
+	{
+		global $database;
+
+		$pdo_stmt = $database->runQueryPlayer('SELECT * from '.$table);
+		$pdo_stmt->execute();
+				
+		foreach(range(0, $pdo_stmt->columnCount() - 1) as $column_index)
+		{
+			$meta[] = $pdo_stmt->getColumnMeta($column_index);
+		}
+
+		return $meta;
+	}
+	
+	function translateNativeType($orig) {
+		$trans = array(
+			'VAR_STRING' => 'string',
+			'STRING' => 'string',
+			'BLOB' => 'blob',
+			'LONGLONG' => 'int',
+			'LONG' => 'int',
+			'SHORT' => 'int',
+			'TINY' => 'int',
+			'DATETIME' => 'datetime',
+			'DATE' => 'date',
+			'DOUBLE' => 'real',
+			'TIMESTAMP' => 'timestamp'
+		);
+		return $trans[$orig];
+	}
+	
+	function getCharData($id)
+	{
+		global $database;
+		
+		$stmt = $database->runQueryPlayer("SELECT * FROM player WHERE id=:id");
+		$stmt->bindParam(':id', $id, PDO::PARAM_INT);
+		$stmt->execute();
+		$result=$stmt->fetch(PDO::FETCH_ASSOC);
+
+		return $result;
+	}
+	
+	function updateChar($id, $columns, $old)
+	{
+		global $database;
+		
+		$query = '';
+		$new_data = array();
+
+		foreach($columns as $column)
+			if(isset($_POST[$column['name']]) && $old[$column['name']] != $_POST[$column['name']])
+			{
+				$new_data[$column['name']] = $_POST[$column['name']];
+				$query = $query.$column['name'].'=:'.$column['name'].', ';
+			}
+				
+		if(strlen($query))
+		{
+			$query=rtrim($query,", ");
+			$new_data['id_player'] = $id;
+			
+			$stmt = $database->runQueryPlayer("UPDATE player SET ".$query." WHERE id=:id_player");
+			$stmt->execute($new_data);
+			$stmt->execute();
+		}
+	}
+	
+	function getModulesList()
+	{
+		$modules = '';
+		$modules = @file_get_contents('https://new.metin2cms.cf/v2/modules/modules.json');
+		
+		$modules = json_decode($modules, TRUE);
+
+		if(isset($modules['modules']))
+			return $modules['modules'];
+		else return array();
+	}
+	
+	function getThemesList()
+	{
+		$themes = '';
+		$themes = @file_get_contents('https://new.metin2cms.cf/v2/themes/themes.json');
+		
+		$themes = json_decode($themes, TRUE);
+
+		if(isset($themes['themes']))
+			return $themes['themes'];
+		else return array();
 	}
 ?>

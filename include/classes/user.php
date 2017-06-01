@@ -114,18 +114,20 @@ class USER
 			{
 				if($userRow['status']=='OK')
 				{
+					if(check_account_column('availDt') && check_availDt($userRow['id']))
+						return array(5, getLoginLastBanReason($userRow['id']), get_availDt($userRow['id']));
 					$_SESSION['id'] = $userRow['id'];
 					$_SESSION['password'] = securityPassword($userRow['password']);
 					$_SESSION['fingerprint'] = md5($_SERVER['HTTP_USER_AGENT'] . 'x' . $_SERVER['REMOTE_ADDR']);
-					return 1;
+					return array(1);
 				}
 				else
-					return 2;
+					return array(2, getLoginLastBanReason($userRow['id']));
 			} else {
 				if(isValidEmail($login))
-					return 4;
+					return array(4);
 				else
-					return 3;
+					return array(3);
 			}
 		}
 		catch(PDOException $e)

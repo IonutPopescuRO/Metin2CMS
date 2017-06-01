@@ -14,4 +14,20 @@
 			if($web_admin>=$news_lvl)
 				print '<script src="http://cdn.ckeditor.com/4.5.10/full/ckeditor.js"></script>';
 	}
+	else if($page=="admin" && $a_page=="players")
+	{
 ?>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("body").tooltip({ selector: '[data-toggle=tooltip]' });
+		});
+		
+		$(document).on("click", ".open-accountID", function () {
+			 var account_id = $(this).data('id');
+			 $(".modal-body #accountID").val( account_id );
+
+			 document.getElementById("banModal").innerText = "<?php print $lang['ban']; ?> - " + document.getElementById(account_id).innerText;
+			 document.getElementById("unBanModal").innerText = "<?php print $lang['unban']; ?> - " + document.getElementById(account_id).innerText;
+		});
+	</script>
+<?php } ?>

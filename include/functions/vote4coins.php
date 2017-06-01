@@ -2,13 +2,13 @@
 	$vote4coins = file_get_contents('include/db/vote4coins.json');
 	$vote4coins = json_decode($vote4coins, true);
 	
-	if(isset($_GET['site']) && isset($vote4coins[$_GET['site']]) && isset($vote4coins[$_GET['site']]['link']) && isset($vote4coins[$_GET['site']]['value']) && isset($vote4coins[$_GET['site']]['type']) && isset($vote4coins[$_GET['site']]['time']) )
+	if(isset($_GET['site']) && isset($vote4coins[$_GET['site']]) && isset($vote4coins[$_GET['site']]['link']) && isset($vote4coins[$_GET['site']]['value']) && isset($vote4coins[$_GET['site']]['type']) && isset($vote4coins[$_GET['site']]['time']))
 	{
 		$voted_now = false;
 		$account_ip = get_account_ip();
 		if(filter_var($account_ip, FILTER_VALIDATE_IP) !== false)
 		{
-			if(!check_vote4coins($account_ip, $_GET['site']))
+			if(!check_vote4coins($account_ip, $_GET['site']) && !check_vote4coins_by_account($_GET['site']))
 			{
 				insert_vote4coins($_GET['site'], $account_ip);
 				if($vote4coins[$_GET['site']]['type']==1)

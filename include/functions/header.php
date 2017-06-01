@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 	session_start();
 	
 	header('Cache-control: private');
@@ -70,7 +70,7 @@
 				header("Location: ".$site_url);
 				die();
 			}
-				
+						
 		$web_admin = web_admin_level();
 		
 		if($database->is_loggedin() && $web_admin>=$news_lvl)
@@ -83,15 +83,23 @@
 				die();
 			}
 		}
+		
+		$jsondataFunctions = file_get_contents('include/db/functions.json');
+		$jsondataFunctions = json_decode($jsondataFunctions, true);
+		
+		$statistics = false;
+		foreach($jsondataFunctions as $key => $status)
+			if($key != 'active-registrations' && $status)
+			{
+				$statistics = true;
+				break;
+			}
+		
 		if($current_page=="logout")
 		{
 			$database->doLogout();
 			header("Location: ".$site_url);
 			die();
-		} else if($current_page=="register")
-		{
-			$jsondataFunctions = file_get_contents('include/db/functions.json');
-			$jsondataFunctions = json_decode($jsondataFunctions, true);
 		} else if($page=='players')
 		{
 			if(isset($_POST['search']) && strlen($_POST['search'])>=3)
@@ -215,6 +223,97 @@
 					header("Location: ".$site_url.'admin/links');
 					die();
 				}
+			} else if($admin_page=='players')
+			{
+				if(isset($_POST['search']) && strlen($_POST['search'])>=3)
+				{
+					header("Location: ".$site_url."admin/players/1/".$_POST['search']);
+					die();
+				} else if(isset($_POST['search']) && $_POST['search']=='')
+				{
+					header("Location: ".$site_url."admin/players/1");
+					die();
+				}
+				
+				if(isset($_GET['player_name']))
+				{
+					$new_search = strip_tags($_GET['player_name']);
+					if(strlen($new_search)>=3)
+						$search = $new_search;
+				}
+				
+				require_once("include/classes/admin-players.php");
+				$paginate = new paginate();
+				
+				if(isset($_POST['permanent']) && isset($_POST['accountID']))
+				{
+					banPermanent(intval($_POST['accountID']), $_POST['permanent']);
+					
+					$location = '';
+					if(isset($_GET["page_no"]) && is_numeric($_GET["page_no"]) && $_GET["page_no"]>1)
+						$location = $_GET["page_no"];
+					else $location = 1;
+					if($search)
+						$location.= '/'.$search;
+					
+					header("Location: ".$site_url."admin/players/".$location);
+					die();
+				}
+				else if(isset($_POST['unban']) && isset($_POST['accountID']))
+				{
+					unBan(intval($_POST['accountID']));
+					
+					$location = '';
+					if(isset($_GET["page_no"]) && is_numeric($_GET["page_no"]) && $_GET["page_no"]>1)
+						$location = $_GET["page_no"];
+					else $location = 1;
+					if($search)
+						$location.= '/'.$search;
+					
+					header("Location: ".$site_url."admin/players/".$location);
+					die();
+				} else if(isset($_POST['temporary']) && isset($_POST['accountID']) && isset($_POST['months']) && isset($_POST['days']) && isset($_POST['hours']) && isset($_POST['minutes']) && check_account_column('availDt'))
+				{
+					$time_availDt = strtotime("now +".intval($_POST['months'])." month +".intval($_POST['days'])." day +".intval($_POST['hours'])." hours +".intval($_POST['minutes'])." minute");
+					banTemporary(intval($_POST['accountID']), $_POST['temporary'], $time_availDt);
+					
+					$location = '';
+					if(isset($_GET["page_no"]) && is_numeric($_GET["page_no"]) && $_GET["page_no"]>1)
+						$location = $_GET["page_no"];
+					else $location = 1;
+					if($search)
+						$location.= '/'.$search;
+					
+					header("Location: ".$site_url."admin/players/".$location);
+					die();
+				}
+			}
+			else if($admin_page=='player_edit')
+			{
+				$player_id = isset($_GET['id']) ? $_GET['id'] : null;
+				if(!check_char($player_id))
+				{
+					header("Location: ".$site_url."admin/players");
+					die();	
+				} else {
+					$columns = getCharColumns('player');
+					foreach($columns as $key => $column)
+					{
+						$type = translateNativeType($column['native_type']);
+						if(!($type=='int' || $type=='string') || $column['name']=='id')
+							unset($columns[$key]);
+					}
+					
+					$actual_data = getCharData($player_id);
+
+					if(isset($_POST['submit']))
+					{
+						updateChar($player_id, $columns, $actual_data);
+						
+						header("Location: ".$site_url.'admin/player/edit/'.$player_id);
+						die();	
+					}
+				}
 			}
 			else if($admin_page=='createitems')
 			{
@@ -301,9 +400,21 @@
 
 				if(isset($_POST['submit']))
 				{
-					$jsondataFunctions['active-registrations'] = $_POST['active-registrations'];
-					$json_new = json_encode($jsondataFunctions);
-					file_put_contents('include/db/functions.json', $json_new);
+					$edited = false;
+					
+					foreach($_POST as $key=>$value)
+						if(isset($jsondataFunctions[$key]))
+							if($jsondataFunctions[$key]!=$value)
+							{
+								$jsondataFunctions[$key]=$value;
+								$edited = true;
+							}
+					
+					if($edited)
+					{
+						$json_new = json_encode($jsondataFunctions);
+						file_put_contents('include/db/functions.json', $json_new);
+					}
 					
 					header("Location: ".$site_url.'admin/functions');
 					die();
