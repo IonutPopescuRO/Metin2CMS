@@ -159,6 +159,7 @@ $lang = array(
 	'guilds-created' => 'Guilds created',
 	'offline-shops' => 'Offline shops',
 	'players-online-last-24h' => 'Players online (24h)',
+	'statistics' => 'Statistics',
 	'player-management' => 'Player management',
 	'player-management-info' => 'You can ban a player or change his status.',
 	'account' => 'Account',
