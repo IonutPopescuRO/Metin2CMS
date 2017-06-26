@@ -36,7 +36,7 @@ $lang = array(
 	'first-page' => 'First page',
 	'last-page' => 'Last page',
 	'name' => 'Name',
-	'level' => 'Nivel',
+	'level' => 'Level',
 	'empire' => 'Empire',
 	'success' => 'Success',
 	'success-register' => 'The user account has been successfully created. Now you can log into the game and on the site.',
@@ -185,6 +185,9 @@ $lang = array(
 	'install' => 'Install',
 	'uninstall-info' => 'The module has been successfully uninstalled.',
 	'no-themes' => 'There are currently no themes available.',
-	'themes-update-info' => 'After each update, you will have to reinstall the theme.'
+	'themes-update-info' => 'After each update, you will have to reinstall the theme.',
+	
+	//2.7
+	'account-new-column' => 'A new column has been added to the account table: '
 	);
 ?>

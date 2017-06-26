@@ -2,6 +2,7 @@
 	include 'include/functions/check-version.php';
 	if(file_exists('include/functions/update.php'))
 		include 'include/functions/update.php';
+	fix_account_columns();
 ?>
 <div class="list-group">
 	<li class="list-group-item active">

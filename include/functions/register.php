@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 	if(isset($_POST['captcha']) && isset($_POST['username']) && isset($_POST['password']) && isset($_POST['rpassword']) && isset($_POST['email']) && isset($_SESSION['captcha']['code']))
 	{
 		$errors = array();

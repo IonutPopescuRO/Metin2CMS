@@ -1,11 +1,11 @@
 <?php
+	//Site url - add / at the end, eg: http://metin2cms.cf/mt2/ IMPORTANT!!!
+	$site_url = "http://metin2cms.cf/mt2/";
+	
 	//Game database
 	$host = "localhost";
 	$user = "root";
 	$password = "xxxxxx";
-	
-	//Site url - add / at the end, eg: http://metin2cms.cf/mt2/
-	$site_url = "http://metin2cms.cf/mt2/";
 	
 	//Privileges - web_admin minim level for use admin functions
 	$news_lvl = 1;

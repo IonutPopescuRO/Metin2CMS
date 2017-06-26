@@ -1554,4 +1554,32 @@
 			return $themes['themes'];
 		else return array();
 	}
+	
+	//2.7
+	function fix_account_columns()
+	{
+		global $database;
+		global $lang;
+		
+		$sth = $database->runQueryAccount("DESCRIBE account");
+		$sth->execute();
+		$columns = $sth->fetchAll(PDO::FETCH_COLUMN);
+		
+		$fix = array(	"coins" => "ALTER TABLE account ADD coins int(20) NOT NULL DEFAULT 0",
+						"jcoins" => "ALTER TABLE account ADD jcoins int(20) NOT NULL DEFAULT 0", 
+						"deletion_token" => "ALTER TABLE account ADD deletion_token varchar(40) NOT NULL",
+						"passlost_token" => "ALTER TABLE account ADD passlost_token varchar(40) NOT NULL",
+						"email_token" => "ALTER TABLE account ADD email_token varchar(40) NOT NULL",
+						"new_email" => "ALTER TABLE account ADD new_email varchar(64) NOT NULL");
+		
+		foreach($fix as $column => $query)
+			if(!in_array($column, $columns))
+			{
+				$stmt = $database->runQueryAccount($fix[$column]);
+				$stmt->execute();
+
+				print '<div class="alert alert-success alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button><center>'.$lang['account-new-column'].$column.'</center></div>';
+			}
+	}
+	
 ?>

@@ -185,6 +185,9 @@ $lang = array(
 	'install' => 'Instalare',
 	'uninstall-info' => 'Modulul a fost dezinstalat cu succes.',
 	'no-themes' => 'Momentan nu sunt teme disponibile.',
-	'themes-update-info' => 'După fiecare actualizare, veți fi nevoit să reinstalați tema.'
+	'themes-update-info' => 'După fiecare actualizare, veți fi nevoit să reinstalați tema.',
+	
+	//2.7
+	'account-new-column' => 'O nouă coloană a fost adăugată în tabelul account: '
 	);
 ?>

@@ -7,6 +7,9 @@
 		
 	include 'config.php';
 	
+	if (substr($site_url, -1)!='/')
+		$site_url.='/';
+	
 	include 'include/functions/version.php';
 	
 	include 'include/functions/language.php';
