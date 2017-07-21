@@ -10,6 +10,8 @@
 	if (substr($site_url, -1)!='/')
 		$site_url.='/';
 	
+	$site_domain = $_SERVER['HTTP_HOST'];
+	
 	include 'include/functions/version.php';
 	
 	include 'include/functions/language.php';
@@ -22,6 +24,7 @@
 	$jsondataRanking = json_decode($jsondataRanking,true);
 	include 'include/functions/json.php';
 	$site_title = getJsonSettings("title");
+	$paypal_email = getJsonSettings("paypal");
 	$forum=getJsonSettings("forum", "links");
 	$support=getJsonSettings("support", "links");
 	$item_shop=getJsonSettings("item-shop", "links");
@@ -92,7 +95,7 @@
 		
 		$statistics = false;
 		foreach($jsondataFunctions as $key => $status)
-			if($key != 'active-registrations' && $status)
+			if($key != 'active-registrations' && $key != 'players-debug' && $status)
 			{
 				$statistics = true;
 				break;
@@ -155,6 +158,54 @@
 		{
 			$jsondataDownload = file_get_contents('include/db/download.json');
 			$jsondataDownload = json_decode($jsondataDownload, true);
+		} else if($page=='donate')
+		{
+			$jsondataDonate = file_get_contents('include/db/donate.json');
+			$jsondataDonate = json_decode($jsondataDonate, true);
+			
+			if(isset($_POST["method"]) && strtolower($_POST["method"])=='paypal' && isset($_POST['id']) && isset($_POST['type']))
+			{
+				$return_url = $site_url."index.php";
+				$cancel_url = $site_url."index.php";
+				$notify_url = $site_url."paypal.php";
+				
+				$querystring = '';
+				$querystring .= "?business=".urlencode($paypal_email)."&";
+				
+				$price = $jsondataDonate[$_POST['id']]['list'][$_POST['type']];
+				
+				$querystring .= "item_name=".urlencode($jsondataDonate[$_POST['id']]['name'].' ['.$price['price'].' - '.$price['md'].' MD]')."&";
+				$querystring .= "amount=".urlencode($price['price'])."&";
+				
+				$querystring .= "cmd=".urlencode(stripslashes("_xclick"))."&";
+				$querystring .= "no_note=".urlencode(stripslashes("1"))."&";
+				$querystring .= "currency_code=".urlencode(stripslashes("EUR"))."&";
+				$querystring .= "bn=".urlencode(stripslashes("PP-BuyNowBF:btn_buynow_LG.gif:NonHostedGuest"))."&";
+				$querystring .= "first_name=".urlencode(stripslashes(getAccountName($_SESSION['id'])))."&";
+				
+				$querystring .= "return=".urlencode(stripslashes($return_url))."&";
+				$querystring .= "cancel_return=".urlencode(stripslashes($cancel_url))."&";
+				$querystring .= "notify_url=".urlencode($notify_url)."&";
+				$querystring .= "item_number=".urlencode($jsondataDonate[$_POST['id']]['name'].' ['.$price['price'].' - '.$price['md'].' MD]')."&";
+				$querystring .= "custom=".urlencode($_SESSION['id']);
+				
+				//redirect('https://www.sandbox.paypal.com/cgi-bin/webscr'.$querystring);
+				$url = 'https://www.paypal.com/cgi-bin/webscr'.$querystring;
+				if(!headers_sent()) {
+					header('Location: '.$url);
+					exit;
+				} else {
+					echo '<script type="text/javascript">';
+					echo 'window.location.href="'.$url.'";';
+					echo '</script>';
+					echo '<noscript>';
+					echo '<meta http-equiv="refresh" content="0;url='.$url.'" />';
+					echo '</noscript>';
+					exit;
+				}
+				
+				exit();
+			}
 		}
 		redirect($page);
 
@@ -422,6 +473,147 @@
 					header("Location: ".$site_url.'admin/functions');
 					die();
 				}
+			}
+			else if($admin_page=='language')
+			{
+				if(isset($_POST['default-language']))
+				{
+					$edited = false;
+					
+					if(isset($json_languages['languages'][$_POST['default-language']]) && $_POST['default-language'] != $json_languages['settings']['default'])
+					{
+						$json_languages['settings']['default'] = $_POST['default-language'];
+						$edited = true;
+					}
+					
+					if($edited)
+					{
+						$json_new = json_encode($json_languages);
+						file_put_contents('include/db/languages.json', $json_new);
+					}
+					
+					header("Location: ".$site_url.'admin/language');
+					die();
+				} else if(isset($_POST['delete']))
+				{
+					$edited = false;
+					if(isset($json_languages['languages'][$_POST['delete']]) && $_POST['delete'] != $json_languages['settings']['default'])
+					{
+						unset($json_languages['languages'][$_POST['delete']]);
+						unlink('include/languages/'.$_POST['delete'].'.php');
+						$edited = true;
+					}
+					
+					if($edited)
+					{
+						$json_new = json_encode($json_languages);
+						file_put_contents('include/db/languages.json', $json_new);
+					}
+					
+					header("Location: ".$site_url.'admin/language');
+					die();
+				} else if(isset($_POST['install']) && isset($_POST['name']) && isset($_POST['link']))
+				{
+					$edited = false;
+					$file = 'update.zip';
+					@file_put_contents($file, file_get_contents($_POST['link']));
+
+					if(file_exists($file)) {
+						$path = pathinfo(realpath($file), PATHINFO_DIRNAME);
+
+						$zip = new ZipArchive;
+						$res = $zip->open($file);
+						if($res === TRUE) {
+							$zip->extractTo($path);
+							$zip->close();
+							
+							if(file_exists($file)) {
+								unlink($file);
+							}
+							
+							if(!isset($json_languages['languages'][$_POST['install']]))
+							{
+								$json_languages['languages'][$_POST['install']] = $_POST['name'];
+								$edited = true;
+							}
+							
+							if($edited)
+							{
+								$json_new = json_encode($json_languages);
+								file_put_contents('include/db/languages.json', $json_new);
+							}
+						}
+					}
+					
+					header("Location: ".$site_url.'admin/language');
+					die();
+				}
+			}
+			else if($admin_page=='donate')
+			{
+				$jsondataDonate = file_get_contents('include/db/donate.json');
+				$jsondataDonate = json_decode($jsondataDonate, true);
+				
+				if(!$jsondataDonate)
+					$jsondataDonate = array();
+				
+				if(isset($_POST['submit']))
+				{
+					$new_link = array();
+					$new_link['name'] = $_POST['download_server'];
+					$new_link['list'] = array();
+					
+					array_push($jsondataDonate, $new_link);
+					
+					$json_new = json_encode($jsondataDonate);
+					file_put_contents('include/db/donate.json', $json_new);
+					
+					header("Location: ".$site_url.'admin/donate');
+					die();
+				} else if(isset($_GET['del']))
+				{
+					unset($jsondataDonate[$_GET['del']]);
+					
+					$json_new = json_encode($jsondataDonate);
+					file_put_contents('include/db/donate.json', $json_new);
+					
+					header("Location: ".$site_url.'admin/donate');
+					die();
+				}  else if(isset($_POST['submit_delete_price']))
+				{
+					unset($jsondataDonate[$_POST['id']]['list'][$_POST['price_id']]);
+					
+					$json_new = json_encode($jsondataDonate);
+					file_put_contents('include/db/donate.json', $json_new);
+					
+					header("Location: ".$site_url.'admin/donate');
+					die();
+				} else if(isset($_POST['submit_price']))
+				{
+					$new_price = array();
+					$new_price['price'] = $_POST['price'];
+					$new_price['md'] = $_POST['md'];
+
+					array_push($jsondataDonate[$_POST['id']]['list'], $new_price);
+					
+					$json_new = json_encode($jsondataDonate);
+					file_put_contents('include/db/donate.json', $json_new);
+					
+					header("Location: ".$site_url.'admin/donate');
+					die();
+				}
+			}
+			else if($admin_page=='donatelist')
+			{
+				if(isset($_POST['yes']))
+				{
+					updateDonateStatus($_POST['id'], 1);
+					addCoins($_POST['account'], $_POST['md']);
+				} else if(isset($_POST['no']))
+				{
+					updateDonateStatus($_POST['id'], 2);
+				}
+				$jsondataDonate = get_donations();
 			}
 		}
 		

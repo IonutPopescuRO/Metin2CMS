@@ -28,7 +28,16 @@
 			<div class="list-group">
 				<?php if($web_admin) { ?>
 				<a href="<?php print $site_url; ?>admin" class="list-group-item list-group-item-action"><?php print $lang['administration']; ?><?php if(checkUpdate(officialVersion())) print ' <span class="tag tag-info tag-pill float-xs-right">'.$lang['update-available'].'</span>'; ?></a>
-				<?php } ?>
+				<?php 
+						$count_donations = count(get_donations());
+						if($count_donations)
+						{
+				?>	
+				<a href="<?php print $site_url; ?>admin/donatelist" class="list-group-item list-group-item-action"><?php print $lang['donatelist']; ?> <span class="tag tag-info tag-pill float-xs-right"><?php print $count_donations.' '.$lang['new-donations']; ?> </span></a>
+				<?php
+						}
+					} 
+				?>
 				<a href="<?php print $site_url; ?>user/administration" class="list-group-item list-group-item-action"><?php print $lang['account-data']; ?></a>
 				<a href="<?php print $site_url; ?>user/characters" class="list-group-item list-group-item-action"><?php print $lang['chars-list']; ?></a>
 				<?php if($item_shop!="") { ?>
@@ -39,6 +48,12 @@
 					
 					if(count($vote4coins))
 						print '<a href="'.$site_url.'user/vote4coins" class="list-group-item list-group-item-action">Vote4Coins</a>';
+					
+					$donate = file_get_contents('include/db/donate.json');
+					$donate = json_decode($donate, true);
+					
+					if(count($donate))
+						print '<a href="'.$site_url.'user/donate" class="list-group-item list-group-item-action">'.$lang['donate'].'</a>';
 				?>
 				<a href="<?php print $site_url; ?>users/logout" class="list-group-item list-group-item-action list-group-item-danger"><?php print $lang['logout']; ?></a>
 				<?php if($web_admin) { ?>

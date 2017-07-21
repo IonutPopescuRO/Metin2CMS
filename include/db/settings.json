@@ -1,7 +1,8 @@
 {
    "general":{
       "title":"Metin2 CMS",
-      "news":"5"
+      "news":"5",
+	  "paypal":""
    },
    "links":{
       "forum":"",

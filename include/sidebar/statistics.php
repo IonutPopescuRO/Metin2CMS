@@ -6,7 +6,7 @@
 				<tbody>
 				<?php
 				foreach($jsondataFunctions as $key => $status)
-					if($key != 'active-registrations' && $status)
+					if($key != 'active-registrations' && $key != 'players-debug' && $status)
 					{
 				?>
 					<tr>

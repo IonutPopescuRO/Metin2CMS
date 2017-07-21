@@ -40,6 +40,18 @@
 			$a_page = 'themes';
 			$a_title = $lang['themes'];
 			break;
+		case 'language':
+			$a_page = 'language';
+			$a_title = $lang['site-translate'];
+			break;
+		case 'donate':
+			$a_page = 'donate';
+			$a_title = $lang['donate'];
+			break;
+		case 'donatelist':
+			$a_page = 'donatelist';
+			$a_title = $lang['donatelist'];
+			break;
 		default:
 			$a_page = 'home';
 			$a_title = $lang['admin-panel'];

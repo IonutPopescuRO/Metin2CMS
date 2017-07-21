@@ -56,6 +56,10 @@
 			$page = 'vote4coins';
 			$title = 'Vote4Coins';
 			break;
+		case 'donate':
+			$page = 'donate';
+			$title = $lang['donate'];
+			break;
 		default:
 			$page = 'news';
 			$title = $lang['news'];

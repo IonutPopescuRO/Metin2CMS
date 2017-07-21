@@ -37,14 +37,16 @@ RewriteRule ^user/delete/(.*)/ index.php?p=administration&code=$1
 RewriteRule ^user/delete/(.*) index.php?p=administration&code=$1
 RewriteRule ^user/password/(.*)/ index.php?p=password&code=$1
 RewriteRule ^user/password/(.*) index.php?p=password&code=$1
+
 RewriteRule ^user/email/(.*)/ index.php?p=email&code=$1
 RewriteRule ^user/email/(.*) index.php?p=email&code=$1
 RewriteRule ^user/email/ index.php?p=email&code=$1
 RewriteRule ^user/email index.php?p=email&code=$1
-RewriteRule ^user/email/(.*)/ index.php?p=email&code=$1
-RewriteRule ^user/email/(.*) index.php?p=email&code=$1
+
 RewriteRule ^user/administration ./index.php?p=administration
 RewriteRule ^user/characters ./index.php?p=characters
+
+RewriteRule ^user/donate index.php?p=donate
 
 RewriteRule ^user/vote4coins/(.*)/ index.php?p=vote4coins&site=$1
 RewriteRule ^user/vote4coins/(.*) index.php?p=vote4coins&site=$1
@@ -74,6 +76,8 @@ RewriteRule ^admin/vote4coins/(.*)/ index.php?p=admin&a=vote4coins&del=$1
 RewriteRule ^admin/vote4coins/(.*) index.php?p=admin&a=vote4coins&del=$1
 RewriteRule ^admin/download/(.*)/ index.php?p=admin&a=download&del=$1
 RewriteRule ^admin/download/(.*) index.php?p=admin&a=download&del=$1
+RewriteRule ^admin/donate/(.*)/ index.php?p=admin&a=donate&del=$1
+RewriteRule ^admin/donate/(.*) index.php?p=admin&a=donate&del=$1
 RewriteRule ^admin/(.*)/ index.php?p=admin&a=$1
 RewriteRule ^admin/(.*) index.php?p=admin&a=$1
 RewriteRule ^admin/ index.php?p=admin

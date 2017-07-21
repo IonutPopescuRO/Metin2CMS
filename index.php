@@ -49,19 +49,20 @@
                 </li>
 				<?php } else { ?>
                 <li class="cms2-u menu-item"><a href="<?php print $site_url; ?>"><?php print $lang['server-offline']; ?></a></li>
-				<?php } ?>
-                <li class="cms2-u menu-item"><a href="#"><?php print $language_codes[$language_code]; ?></a>
+				<?php } if(count($json_languages['languages'])>1) { ?>
+                <li class="cms2-u menu-item"><a href="#"><?php print $json_languages['languages'][$language_code]; ?></a>
 					<ul class="sub-menu">
 						<?php
-							foreach($language_codes as $key => $value)
+							foreach($json_languages['languages'] as $key => $value)
 								print '<li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="'.$site_url.'?lang='.$key.'">'.$value.'</a></li>';
 						?>
 					</ul>
                 </li>
+				<?php } ?>
 			</ul>
 			
             <ul id='menu-external-nav' class='cms2-g external eason'>
-                <li class='cms2-u menu-item menu-item-type-post_type'><a target='' class='relatedlink' href=''><?php print strtoupper($_SERVER['HTTP_HOST']);?></a>
+                <li class='cms2-u menu-item menu-item-type-post_type'><a target='' class='relatedlink' href=''><?php print strtoupper($site_domain);?></a>
                 </li>
 				<?php
 					if($forum!="") {

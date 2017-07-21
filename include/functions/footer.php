@@ -12,7 +12,7 @@
 	{
 		if($database->is_loggedin())
 			if($web_admin>=$news_lvl)
-				print '<script src="http://cdn.ckeditor.com/4.5.10/full/ckeditor.js"></script>';
+				print '<script src="https://cdn.ckeditor.com/4.7.1/full/ckeditor.js"></script>';
 	}
 	else if($page=="admin" && $a_page=="players")
 	{

@@ -14,7 +14,7 @@
 			<div class="form-group row">
 				<label for="<?php print $name; ?>" class="col-sm-2 col-form-label"><?php if($name=='news') print $lang['news-on-page']; else if($name=='title') print $lang['title']; else print ucfirst($name); ?></label>
 				<div class="col-sm-10">
-					<input type="<?php if($name=='news') print 'number'; else if($name=='title') print 'text'; else print 'url'; ?>" class="form-control" name="<?php print $name; ?>" placeholder="http://" value="<?php print $link; ?>">
+					<input type="<?php if($name=='news') print 'number'; else if($name=='title') print 'text'; else if($name=='paypal') print 'email'; else print 'url'; ?>" class="form-control" name="<?php print $name; ?>" placeholder="<?php if($name=='news') print '5'; else if($name=='title') print 'Metin2CMS'; else if($name=='paypal') print 'contact@ionut.work'; else print 'http://'; ?>" value="<?php print $link; ?>">
 				</div>
 			</div>
 		<?php } ?>

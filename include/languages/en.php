@@ -188,6 +188,28 @@ $lang = array(
 	'themes-update-info' => 'After each update, you will have to reinstall the theme.',
 	
 	//2.7
-	'account-new-column' => 'A new column has been added to the account table: '
+	'account-new-column' => 'A new column has been added to the account table: ',
+	
+	//2.8
+	'site-translate' => 'Managing site translations',
+	'site-translate-info' => 'You have the ability to translate your site into different languages.',
+	'default-language' => 'The default language of the site',
+	'send-translation' => 'Send a translation',
+	'debug' => 'Debug',
+	'players-debug' => 'Character Debug?',
+	'debug-success' => 'The character has been reset to Map 1.',
+	'donate' => 'Donate',
+	'donate-info' => 'Add new donate methods and prices.',
+	'donatelist' => 'Donate list',
+	'donatelist-info' => 'Validates donations made by players.',
+	'price' => 'Price',
+	'code' => 'Code',
+	'send-donate' => 'The donation will be verified as soon as possible by an administrator.',
+	'view-donations' => 'View donations',
+	'status' => 'Status',
+	'no-paypal' => 'You need to set up your paypal email!',
+	'paypal-info' => 'To enable automatic payment via PayPal, just create a new category with the name "PayPal".',
+	'new-donations' => 'new donations',
+	'validation' => 'Validation'
 	);
 ?>

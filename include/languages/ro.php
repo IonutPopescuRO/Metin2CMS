@@ -188,6 +188,28 @@ $lang = array(
 	'themes-update-info' => 'După fiecare actualizare, veți fi nevoit să reinstalați tema.',
 	
 	//2.7
-	'account-new-column' => 'O nouă coloană a fost adăugată în tabelul account: '
+	'account-new-column' => 'O nouă coloană a fost adăugată în tabelul account: ',
+	
+	//2.8
+	'site-translate' => 'Gestionare traduceri site',
+	'site-translate-info' => 'Ai posibilitatea de a-ți traduce site-ul în diferite limbi.',
+	'default-language' => 'Limba implicită a site-ului',
+	'send-translation' => 'Trimite traducere',
+	'debug' => 'Debug',
+	'players-debug' => 'Debug la caractere?',
+	'debug-success' => 'Caracterul a fost resetat în Map 1.',
+	'donate' => 'Donează',
+	'donate-info' => 'Adaugă metode noi de donații și prețuri.',
+	'donatelist' => 'Listă donații',
+	'donatelist-info' => 'Validează donațiile jucătorilor.',
+	'price' => 'Preț',
+	'code' => 'Cod',
+	'send-donate' => 'Donația va fi verificată în cel mai scurt timp de către un administrator.',
+	'view-donations' => 'Vizualizează donațiile',
+	'status' => 'Status',
+	'no-paypal' => 'Trebuie să-ți setezi email-ul de paypal!',
+	'paypal-info' => 'Pentru a activa plata automată prin PayPal doar crează o nouă categorie cu numele PayPal.',
+	'new-donations' => 'donații noi',
+	'validation' => 'Validare'
 	);
 ?>

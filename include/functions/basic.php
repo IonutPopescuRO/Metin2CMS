@@ -4,7 +4,7 @@
 		global $database;
 		global $site_url;
 		
-		$pages = array("administration", "characters", "password", "email", "vote4coins");
+		$pages = array("administration", "characters", "password", "email", "vote4coins", "donate");
 		if (in_array($url, $pages) && !$database->is_loggedin())
 		{
 			header("Location: ".$site_url."users/login");
@@ -301,7 +301,7 @@
 	{
 		global $database;
 		
-		$stmt = $database->runQueryPlayer('SELECT name, job, level, exp
+		$stmt = $database->runQueryPlayer('SELECT id, name, job, level, exp
 			FROM player
 			WHERE account_id = ? ORDER BY level DESC, exp DESC, name ASC');
 		$stmt->bindParam(1, $_SESSION['id'], PDO::PARAM_INT);
@@ -1582,4 +1582,62 @@
 			}
 	}
 	
+	//2.8
+	function getLanguagesList()
+	{
+		$languages = '';
+		$languages = @file_get_contents('https://new.metin2cms.cf/v2/languages/languages.json');
+		
+		$languages = json_decode($languages, TRUE);
+
+		if(isset($languages['languages']))
+			return $languages['languages'];
+		else return array();
+	}
+	
+	function reset_char($id, $mapindex, $x, $y)
+	{
+		global $database;
+		
+		
+		$stmt = $database->runQueryPlayer('SELECT map_index, x, y, exit_map_index FROM player WHERE id = ?');
+		$stmt->bindParam(1, $id, PDO::PARAM_INT);
+		$stmt->execute();
+		$result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+		if($result['map_index']!= $mapindex || $result['x']!= $x || $result['y']!= $y || $result['exit_map_index']!= $mapindex)
+		{
+			$stmt = $database->runQueryPlayer("UPDATE player SET map_index=".$mapindex.", x=".$x.", y=".$y.", exit_x=0, exit_y=0, exit_map_index=".$mapindex.", horse_riding=0 WHERE id=".$id);
+			$stmt->execute();	
+		}
+	}
+	
+	function get_donations()
+	{
+		global $database;
+		
+		$stmt = $database->runQuerySqlite("SELECT * FROM donate WHERE status = 0");
+		$stmt->execute();
+		$result=$stmt->fetchAll();
+		
+		return $result;
+	}
+
+	function insert_donate($id, $code, $type)
+	{
+		global $database;
+				
+		$stmt = $database->runQuerySqlite("INSERT INTO donate (account_id, code, type) VALUES (:id, :code, :type)");
+		$stmt->execute(array(':code'=>$code, ':id'=>$id, ':type'=>$type));
+	}
+	
+	function updateDonateStatus($id, $status)
+	{
+		global $database;
+
+		$stmt = $database->runQuerySqlite("UPDATE donate SET status = ? WHERE id = ?");
+		$stmt->bindParam(1, $status, PDO::PARAM_INT);
+		$stmt->bindParam(2, $id, PDO::PARAM_INT);
+		$stmt->execute();
+	}
 ?>

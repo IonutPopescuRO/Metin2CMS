@@ -28,6 +28,20 @@
 </br>
 <div class="list-group">
 	<li class="list-group-item active">
+		<i class="fa fa-money fa-1" aria-hidden="true"></i> <?php print $lang['donate']; ?>
+	</li>
+	<a href="admin/donate" class="list-group-item list-group-item-action">
+		<h5 class="list-group-item-heading"><i class="fa fa-credit-card  fa-1" aria-hidden="true"></i> <?php print $lang['donate']; ?></h5>
+		<p class="list-group-item-text"><?php print $lang['donate-info']; ?></p>
+	</a>
+	<a href="admin/donatelist" class="list-group-item list-group-item-action">
+		<h5 class="list-group-item-heading"><i class="fa fa-check fa-1" aria-hidden="true"></i> <?php print $lang['donatelist']; ?></h5>
+		<p class="list-group-item-text"><?php print $lang['donatelist-info' ]; ?></p>
+	</a>
+</div>
+</br>
+<div class="list-group">
+	<li class="list-group-item active">
 		<i class="fa fa-cogs fa-1" aria-hidden="true"></i> <?php print $lang['game-management']; ?>
 	</li>
 	<a href="admin/players" class="list-group-item list-group-item-action">
@@ -48,6 +62,10 @@
 	<li class="list-group-item active">
 		<i class="fa fa-cogs fa-1" aria-hidden="true"></i> <?php print $lang['cms-management']; ?>
 	</li>
+	<a href="admin/language" class="list-group-item list-group-item-action">
+		<h5 class="list-group-item-heading"><i class="fa fa-language fa-1" aria-hidden="true"></i> <?php print $lang['site-translate']; ?></h5>
+		<p class="list-group-item-text"><?php print $lang['site-translate-info']; ?></p>
+	</a>
 	<a href="admin/modules" class="list-group-item list-group-item-action">
 		<h5 class="list-group-item-heading"><i class="fa fa-plug fa-1" aria-hidden="true"></i> <?php print $lang['modules-management']; ?></h5>
 		<p class="list-group-item-text"><?php print $lang['modules-management-info']; ?></p>

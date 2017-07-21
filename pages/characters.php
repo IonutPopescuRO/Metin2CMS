@@ -13,6 +13,27 @@
 		<div class="container">
 			<p><h2><?php print $lang['chars-list']; ?></h2></p>
 			<hr>
+			<?php
+				if($jsondataFunctions['players-debug'] && isset($_POST['debug']))
+					foreach($list as $player)
+						if($player['id']==intval($_POST['debug']))
+						{
+							print '<div class="alert alert-success alert-dismissible fade in" role="alert">
+										<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>';
+							print $lang['debug-success'];
+							print '</div>';
+							
+							$empire = get_player_empire($_SESSION['id']);	
+
+							if($empire==1) { $mapindex = "0"; $x = "459770"; $y = "953980";}
+							elseif($empire==2) { $mapindex = "21"; $x = "52043"; $y = "166304";}
+							elseif($empire==3) { $mapindex = "41"; $x = "957291"; $y = "255221";}
+							
+							reset_char($player['id'], $mapindex, $x, $y);
+						}
+			?>
 			<?php if(count($list)) { ?>
 			<div style="background-color: white;">
 				<table class="table table-hover">
@@ -23,6 +44,9 @@
 							<th><?php print $lang['name']; ?></th>
 							<th><?php print $lang['level']; ?></th>
 							<th>EXP</th>
+							<?php if($jsondataFunctions['players-debug']) { ?>
+								<th><?php print $lang['debug']; ?></th>
+							<?php } ?>
 						</tr>
 					</thead>
 					<tbody>
@@ -35,6 +59,14 @@
 							<td><?php print $player['name']; ?></td>
 							<td><?php print $player['level']; ?></td>
 							<td><?php print $player['exp']; ?></td>
+							<?php if($jsondataFunctions['players-debug']) { ?>
+								<td>
+									<form action="" method="post">
+										<input type="hidden" name="debug" value="<?php print $player['id']; ?>">
+										<button type="submit" name="submit" class="btn btn-primary btn-sm"><?php print $lang['debug']; ?></button>
+									</form>
+								</td>
+							<?php } ?>
 						</tr>
 						<?php } ?>
 					</tbody>
