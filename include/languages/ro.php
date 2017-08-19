@@ -210,6 +210,7 @@ $lang = array(
 	'no-paypal' => 'Trebuie să-ți setezi email-ul de paypal!',
 	'paypal-info' => 'Pentru a activa plata automată prin PayPal doar crează o nouă categorie cu numele PayPal.',
 	'new-donations' => 'donații noi',
-	'validation' => 'Validare'
+	'validation' => 'Validare',
+	'https-get-contents-error' => 'În acest moment nu puteți face actualizări sau folosi alte teme și alte traduceri. Apasă aici pentru a afla cum să remediezi problema:'
 	);
 ?>

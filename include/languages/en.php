@@ -210,6 +210,7 @@ $lang = array(
 	'no-paypal' => 'You need to set up your paypal email!',
 	'paypal-info' => 'To enable automatic payment via PayPal, just create a new category with the name "PayPal".',
 	'new-donations' => 'new donations',
-	'validation' => 'Validation'
+	'validation' => 'Validation',
+	'https-get-contents-error' => 'At this time, you can not make updates or use other themes and other translations. Click here to find out how to fix the issue:'
 	);
 ?>
