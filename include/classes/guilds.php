@@ -83,16 +83,14 @@ class paginate
 	{		
 		$self = $self.'ranking/guilds/';
 		
-		$stmt = $this->db->prepare($query);
+		$sql = "SELECT count(*) ".strstr($query, 'FROM');
+		
+		$stmt = $this->db->prepare($sql);
 		if($search)
 			$stmt->bindValue(':search', $search.'%');
-		$stmt->execute();		
-		$total_no_of_records = count($stmt->fetchAll());
-
-		$stmt = $this->db->prepare($query);
-		if($search)
-			$stmt->bindValue(':search', $search.'%');
-		$stmt->execute();
+		$stmt->execute(); 
+		
+		$total_no_of_records = $stmt->fetchColumn();
 		
 		if($total_no_of_records > 0)
 		{

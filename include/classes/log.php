@@ -76,12 +76,12 @@ class paginate
 	{		
 		$self = $self.'admin/log/'.$current_log.'/';
 		
-		$stmt = $this->db->prepare($query);
-		$stmt->execute();		
-		$total_no_of_records = count($stmt->fetchAll());
-
-		$stmt = $this->db->prepare($query);
-		$stmt->execute();
+		$sql = "SELECT count(*) ".strstr($query, 'FROM');
+		
+		$stmt = $this->db->prepare($sql);
+		$stmt->execute(); 
+		
+		$total_no_of_records = $stmt->fetchColumn();
 		
 		if($total_no_of_records > 0)
 		{

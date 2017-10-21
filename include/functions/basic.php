@@ -331,22 +331,30 @@
 		
 		$banned_ids = getBannedAccounts();
 
-		if($banned_ids)
-			$stmt = $database->runQueryPlayer("SELECT name FROM player WHERE name NOT LIKE '[%]%' AND account_id NOT IN (".$banned_ids.") ORDER BY level DESC, exp DESC, name ASC");
-		else
-			$stmt = $database->runQueryPlayer("SELECT name FROM player WHERE name NOT LIKE '[%]%' ORDER BY level DESC, exp DESC, name ASC");
-		$stmt->execute();
-		$result = $stmt->fetchAll();
-
 		$ranking = array();
 		
 		foreach($list as $player)
 		{
-			$position = array_search($player['name'], array_column($result, 'name'));
-			if(strpos($player['name'], '[')!== false)
+			$sql =  "SELECT r.position FROM player u 
+						LEFT JOIN (SELECT r.*, @rownum := @rownum + 1 AS position
+						FROM player r CROSS JOIN
+						(SELECT @rownum := 0) r WHERE r.name NOT LIKE '[%]%'";
+			if($banned_ids)
+				$sql.=" AND account_id NOT IN (".$banned_ids.") ";
+			$sql.= "ORDER BY r.level desc, r.exp DESC, r.name ASC LIMIT 1000) r
+					ON r.id = u.id
+					WHERE u.id = :id";
+			
+			$stmt = $database->runQueryPlayer($sql);
+			$stmt->bindParam(':id', $player['id'], PDO::PARAM_INT);
+			$stmt->execute();
+			$result=$stmt->fetch(PDO::FETCH_ASSOC);
+			if(!$result['position'])
+				$ranking[$player['name']] = '<i class="fa fa-times fa-1" aria-hidden="true"></i>';
+			else if(strpos($player['name'], '[')!== false)
 				$ranking[$player['name']] = '<i class="fa fa-times fa-1" aria-hidden="true"></i>';
 			else
-				$ranking[$player['name']] = $position + 1;
+				$ranking[$player['name']] = '~'.$result['position'];
 		}
 		
 		return $ranking;
