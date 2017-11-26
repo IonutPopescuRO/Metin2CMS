@@ -17,10 +17,17 @@ Communication with the database of the cms is done using the PDO extension. Sett
 
 LANGUAGES
 ------------
-The platform is available in 2 languages:
+The platform is available in 8 languages:
 
-  - English
-  - Română
+  - [en]	English 	
+  - [ro] 	Română 	
+  - [hu] 	Magyar 	
+  - [fr] 	Français 	
+  - [pl] 	Polski 	
+  - [pt-BR] 	Português (BR) 	
+  - [es] 	Español 	
+  - [it] 	Italiano
+  
 If you want to help, you can translate in your language and send us.
 
 INSTALATION
