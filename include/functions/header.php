@@ -64,22 +64,31 @@
 			}
 		}
 	}
-		
+	
+	$jsondataPrivileges['news']=9;
+	
 	if(!$offline)
 	{
 		include 'include/functions/basic.php';
 		
 		if($database->is_loggedin())
+		{
 			if(($_SESSION['fingerprint']!=md5($_SERVER['HTTP_USER_AGENT'].'x'.$_SERVER['REMOTE_ADDR'])) || ($_SESSION['password']!=securityPassword(getAccountPassword($_SESSION['id']))))
 			{
 				$database->doLogout();
 				header("Location: ".$site_url);
 				die();
 			}
-						
-		$web_admin = web_admin_level();
+			$web_admin = web_admin_level();
+		} else $web_admin = 0;
+
+		if($web_admin)
+		{
+			$jsondataPrivileges = file_get_contents('include/db/privileges.json');
+			$jsondataPrivileges = json_decode($jsondataPrivileges,true);
+		}
 		
-		if($database->is_loggedin() && $web_admin>=$news_lvl)
+		if($database->is_loggedin() && $web_admin>=$jsondataPrivileges['news'])
 		{
 			$delete = isset($_GET['delete']) ? $_GET['delete'] : null;
 			if(is_numeric($delete))
@@ -95,7 +104,7 @@
 		
 		$statistics = false;
 		foreach($jsondataFunctions as $key => $status)
-			if($key != 'active-registrations' && $key != 'players-debug' && $status)
+			if($key != 'active-registrations' && $key != 'players-debug' && $key != 'active-referrals' && $status)
 			{
 				$statistics = true;
 				break;
@@ -163,6 +172,10 @@
 			$jsondataDonate = file_get_contents('include/db/donate.json');
 			$jsondataDonate = json_decode($jsondataDonate, true);
 			
+			$jsondataCurrency = file_get_contents('include/db/currency.json');
+			$jsondataCurrency = json_decode($jsondataCurrency,true);
+			$currency = $jsondataCurrency[$jsondata['general']['currency']]['code'];
+			
 			if(isset($_POST["method"]) && strtolower($_POST["method"])=='paypal' && isset($_POST['id']) && isset($_POST['type']))
 			{
 				$return_url = $site_url."index.php";
@@ -179,7 +192,7 @@
 				
 				$querystring .= "cmd=".urlencode(stripslashes("_xclick"))."&";
 				$querystring .= "no_note=".urlencode(stripslashes("1"))."&";
-				$querystring .= "currency_code=".urlencode(stripslashes("EUR"))."&";
+				$querystring .= "currency_code=".urlencode(stripslashes($jsondata['general']['currency']))."&";
 				$querystring .= "bn=".urlencode(stripslashes("PP-BuyNowBF:btn_buynow_LG.gif:NonHostedGuest"))."&";
 				$querystring .= "first_name=".urlencode(stripslashes(getAccountName($_SESSION['id'])))."&";
 				
@@ -217,10 +230,17 @@
 			include 'include/functions/email.php';
 		else if($page=='vote4coins')
 			include 'include/functions/vote4coins.php';
+		else if($page=='referrals')
+			include 'include/functions/referrals.php';
+		else if($page=='redeem')
+			include 'include/functions/redeem.php';
 		else if($page=='admin')
 		{
 			$admin_page = isset($_GET['a']) ? $_GET['a'] : null;
 			include 'include/functions/admin-pages.php';
+
+			checkPrivileges($a_page, $web_admin);
+
 			if($admin_page=='log')
 			{
 				$tables = getLogTables();
@@ -240,6 +260,9 @@
 			}
 			else if($admin_page=='links')
 			{
+				$jsondataCurrency = file_get_contents('include/db/currency.json');
+				$jsondataCurrency = json_decode($jsondataCurrency,true);
+
 				if(isset($_POST['submit']))
 				{
 					$edited = false;
@@ -341,6 +364,22 @@
 					header("Location: ".$site_url."admin/players/".$location);
 					die();
 				}
+			} else if($admin_page=='redeem')
+			{
+				require_once("include/classes/admin-redeem-codes.php");
+				$paginate = new paginate();
+				
+				if(isset($_POST['delete']) && isset($_POST['id']))
+				{
+					delete_redeeem_code($_POST['id']);
+					$location = '';
+					if(isset($_GET["page_no"]) && is_numeric($_GET["page_no"]) && $_GET["page_no"]>1)
+						$location = $_GET["page_no"];
+					else $location = 1;
+					
+					header("Location: ".$site_url."admin/redeem/".$location);
+					die();
+				}
 			}
 			else if($admin_page=='player_edit')
 			{
@@ -360,12 +399,21 @@
 					
 					$actual_data = getCharData($player_id);
 
+					$empire = get_player_empire($actual_data['account_id']);
+
+					
 					if(isset($_POST['submit']))
 					{
-						updateChar($player_id, $columns, $actual_data);
+						if($actual_data['name'] != $_POST['name'] && check_char_name($_POST['name']))
+						{
+							$triedName = $_POST['name'];
+							$_POST['name'] = $actual_data['name'];
+						}
 						
-						header("Location: ".$site_url.'admin/player/edit/'.$player_id);
-						die();	
+						updateChar($player_id, $columns, $actual_data);
+						updateWebAdmin($actual_data['account_id'], $_POST['web_admin']);
+						updateGameAdmin(getAccountName($actual_data['account_id']), $actual_data['name'], $_POST['mAuthority']);
+						update_empire($actual_data['account_id'], $_POST['empire']);
 					}
 				}
 			}
@@ -447,30 +495,82 @@
 					die();
 				}
 			}
-			else if($admin_page=='functions')
+			else if($admin_page=='functions' && isset($_POST['submit']))
 			{
-				$jsondataFunctions = file_get_contents('include/db/functions.json');
-				$jsondataFunctions = json_decode($jsondataFunctions, true);
-
+				$edited = false;
+				
+				foreach($_POST as $key=>$value)
+					if(isset($jsondataFunctions[$key]))
+						if($jsondataFunctions[$key]!=$value)
+						{
+							$jsondataFunctions[$key]=$value;
+							$edited = true;
+						}
+				
+				if($edited)
+				{
+					$json_new = json_encode($jsondataFunctions);
+					file_put_contents('include/db/functions.json', $json_new);
+				}
+				
+				header("Location: ".$site_url.'admin/functions');
+				die();
+			} else if($admin_page=='referrals')
+			{
+				$jsondataReferrals = file_get_contents('include/db/referrals.json');
+				$jsondataReferrals = json_decode($jsondataReferrals, true);
+				
 				if(isset($_POST['submit']))
 				{
 					$edited = false;
 					
+					if(isset($_POST['status']) && $jsondataFunctions['active-referrals']!=$_POST['status'])
+					{
+						$jsondataFunctions['active-referrals']=$_POST['status'];
+						
+						$json_new = json_encode($jsondataFunctions);
+						file_put_contents('include/db/functions.json', $json_new);
+					}
+					
 					foreach($_POST as $key=>$value)
-						if(isset($jsondataFunctions[$key]))
-							if($jsondataFunctions[$key]!=$value)
+						if(isset($jsondataReferrals[$key]))
+							if($jsondataReferrals[$key]!=$value)
 							{
-								$jsondataFunctions[$key]=$value;
+								$jsondataReferrals[$key]=$value;
 								$edited = true;
 							}
 					
 					if($edited)
 					{
-						$json_new = json_encode($jsondataFunctions);
-						file_put_contents('include/db/functions.json', $json_new);
+						$json_new = json_encode($jsondataReferrals);
+						file_put_contents('include/db/referrals.json', $json_new);
 					}
 					
-					header("Location: ".$site_url.'admin/functions');
+					header("Location: ".$site_url.'admin/referrals');
+					die();
+				}
+			}
+			else if($admin_page=='privileges')
+			{
+				if(isset($_POST['submit']))
+				{
+					$edited = false;
+					
+					foreach($_POST as $key=>$value)
+						if(isset($jsondataPrivileges[$key]))
+							if($jsondataPrivileges[$key]!=$value)
+							{
+								$jsondataPrivileges[$key]=$value;
+								$edited = true;
+							}
+					
+					if($edited)
+					{
+						$json_new = json_encode($jsondataPrivileges);
+						file_put_contents('include/db/privileges.json', $json_new);
+					}
+					
+					header("Location: ".$site_url.'admin/privileges');
 					die();
 				}
 			}
@@ -554,6 +654,10 @@
 				$jsondataDonate = file_get_contents('include/db/donate.json');
 				$jsondataDonate = json_decode($jsondataDonate, true);
 				
+				$jsondataCurrency = file_get_contents('include/db/currency.json');
+				$jsondataCurrency = json_decode($jsondataCurrency,true);
+				$currency = $jsondataCurrency[$jsondata['general']['currency']]['code'];
+				
 				if(!$jsondataDonate)
 					$jsondataDonate = array();
 				
@@ -614,6 +718,23 @@
 					updateDonateStatus($_POST['id'], 2);
 				}
 				$jsondataDonate = get_donations();
+			}
+			else if($admin_page=='coins' && isset($_POST['account']))
+			{
+				if($_POST['account']==1)
+					$account_id = getAccountIDbyName($_POST['name']);
+				else
+					$account_id = getAccountIDbyChar($_POST['name']);
+				
+				$added = 0;
+				if($account_id)
+				{
+					if($_POST['type']==1)
+						addCoins($account_id, $_POST['coins']);
+					else
+						addjCoins($account_id, $_POST['coins']);
+					$added = 1;
+				} else $added = 2;
 			}
 		}
 		

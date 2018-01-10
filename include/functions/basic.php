@@ -4,7 +4,7 @@
 		global $database;
 		global $site_url;
 		
-		$pages = array("administration", "characters", "password", "email", "vote4coins", "donate");
+		$pages = array("administration", "characters", "password", "email", "vote4coins", "donate", "referrals");
 		if (in_array($url, $pages) && !$database->is_loggedin())
 		{
 			header("Location: ".$site_url."users/login");
@@ -910,6 +910,7 @@
 	{
 		$officialVersion = '';
 		$officialVersion = @file_get_contents('https://new.metin2cms.cf/v2/last_version.php');
+		$officialVersion = str_replace('.', '', $officialVersion);
 		
 		return $officialVersion;
 	}
@@ -917,8 +918,9 @@
 	function checkUpdate($lastVersion)
 	{
 		global $mt2cms;
-				
-		if($lastVersion && $lastVersion!='' && $lastVersion > $mt2cms)
+		$version = str_replace('.', '', $mt2cms);
+		
+		if($lastVersion && $lastVersion!='' && $lastVersion > $version)
 			return 1;
 		return 0;
 	}
@@ -1117,8 +1119,10 @@
 		$stmt->bindParam(2, $ip, PDO::PARAM_STR);
 		$stmt->execute();
 		$result = $stmt->fetchAll(PDO::FETCH_COLUMN);
-
-		return $result[0];
+		
+		if($result)
+			return $result[0];
+		else return false;
 	}
 	
 	function check_date_vote4coins_account($id)
@@ -1131,7 +1135,9 @@
 		$stmt->execute();
 		$result = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
-		return $result[0];
+		if($result)
+			return $result[0];
+		else return false;
 	}
 	
 	function get_account_ip() {
@@ -1647,5 +1653,330 @@
 		$stmt->bindParam(1, $status, PDO::PARAM_INT);
 		$stmt->bindParam(2, $id, PDO::PARAM_INT);
 		$stmt->execute();
+	}
+	
+	//2.10
+	function checkPrivileges($page, $web_admin)
+	{
+		global $jsondataPrivileges, $site_url;
+		
+		if($page=='home' && count($jsondataPrivileges))
+		{
+			foreach($jsondataPrivileges as $priv)
+				if($priv)
+					return;
+				
+			header("Location: ".$site_url);
+			die();
+		}
+		
+		switch ($page) {
+			case 'links':
+				$page = 'edit-info';
+				break;
+			case 'functions':
+				$page = 'functions-on-off';
+				break;
+			case 'vote4coins':
+				$page = 'Vote4Coins';
+				break;
+			case 'players':
+				$page = 'player-management';
+				break;
+			case 'log':
+				$page = 'Log';
+				break;
+			case 'language':
+				$page = 'cms-management';
+				break;
+			case 'modules':
+				$page = 'cms-management';
+				break;
+			case 'themes':
+				$page = 'cms-management';
+				break;
+			case 'donatelist':
+				$page = 'donate';
+				break;
+			case 'player_edit':
+				$page = 'player-management';
+				break;
+			case 'createitems':
+				$page = 'create-items';
+				break;
+			case 'coins':
+				$page = 'add-coins';
+				break;
+			case 'redeem':
+				$page = 'redeem-codes';
+				break;
+		}
+		
+		if($page=='privileges')
+		{
+			if($web_admin<9)
+			{
+				header("Location: ".$site_url."admin");
+				die();
+			} else return;
+		} else if($web_admin>=$jsondataPrivileges[$page])
+			return;
+		
+		header("Location: ".$site_url."admin");
+		die();
+	}
+	
+	function getAccountIDbyName($name)
+	{
+		global $database;
+		
+		$stmt = $database->runQueryAccount("SELECT id FROM account WHERE login LIKE ?");
+		$stmt->bindParam(1, $name, PDO::PARAM_STR);
+		$stmt->execute();
+		$result=$stmt->fetch(PDO::FETCH_ASSOC);
+		
+		return $result['id'];
+	}
+	
+	function getAccountIDbyChar($name)
+	{
+		global $database;
+		
+		$stmt = $database->runQueryPlayer("SELECT account_id FROM player WHERE name LIKE ?");
+		$stmt->bindParam(1, $name, PDO::PARAM_STR);
+		$stmt->execute();
+		$result=$stmt->fetch(PDO::FETCH_ASSOC);
+		
+		return $result['account_id'];
+	}
+	
+	function getReferrals()
+	{
+		global $database;
+		
+		$stmt = $database->runQuerySqlite('SELECT *
+			FROM referrals
+			WHERE invited_by = ?');
+		$stmt->bindParam(1, $_SESSION['id'], PDO::PARAM_INT);
+		$stmt->execute();
+		$result = $stmt->fetchAll();
+		
+		return $result;
+	}
+	
+	function getReferralsForCheck($id)
+	{
+		global $database;
+		
+		$stmt = $database->runQuerySqlite('SELECT *
+			FROM referrals
+			WHERE invited_by = ? AND registered = ? AND claimed = 0');
+		$stmt->bindParam(1, $_SESSION['id'], PDO::PARAM_INT);
+		$stmt->bindParam(2, $id, PDO::PARAM_INT);
+		$stmt->execute();
+		$result = $stmt->fetchAll();
+		
+		return $result;
+	}
+	
+	function getPlayerInfo($account)
+	{
+		global $database;
+		
+		$stmt = $database->runQueryPlayer('SELECT *
+			FROM player
+			WHERE account_id = ? ORDER BY level DESC LIMIT 1');
+		$stmt->bindParam(1, $account, PDO::PARAM_INT);
+		$stmt->execute();
+		$result=$stmt->fetch(PDO::FETCH_ASSOC);
+		
+		return $result;
+	}
+	
+	function getAccountInfo($account)
+	{
+		global $database;
+		
+		$stmt = $database->runQueryAccount('SELECT login
+			FROM account
+			WHERE id = ?');
+		$stmt->bindParam(1, $account, PDO::PARAM_INT);
+		$stmt->execute();
+		$result = $stmt->fetchAll();
+		
+		return $result;
+	}
+	
+	function updateReferrals($id)
+	{
+		global $database;
+		
+		$stmt = $database->runQuerySqlite("UPDATE referrals SET claimed = 1 WHERE registered=:id");
+		$stmt->execute(array(':id'=>$id));
+	}
+	
+	function addReferral($my_id, $ref)
+	{
+		global $database;
+		
+		$stmt = $database->runQuerySqlite("INSERT INTO referrals (invited_by, registered) VALUES (:invited_by, :registered)");
+		$stmt->execute(array(':invited_by'=>$ref, ':registered'=>$my_id));
+	}
+	
+	function check_char_name($name)
+	{
+		global $database;
+		
+		$stmt = $database->runQueryPlayer("SELECT name FROM player WHERE name LIKE :name LIMIT 1");
+		$stmt->bindparam(":name", $name);
+		$stmt->execute();
+		$userRow=$stmt->fetch(PDO::FETCH_ASSOC);
+		if($stmt->rowCount() == 1)
+			return 1;
+		else return 0;	
+	}
+	
+	function searchGMlist($mName)
+	{
+		global $database;
+		
+		$stmt = $database->runQueryCommon('SELECT *
+			FROM gmlist
+			WHERE mName = ?');
+		$stmt->bindParam(1, $mName, PDO::PARAM_STR);
+		$stmt->execute();
+		$result = $stmt->fetchAll();
+		
+		if($result)
+			return $result[0]['mAuthority'];
+		else return 'PLAYER';
+	}
+	
+	function updateGameAdmin($mAccount, $mName, $mAuthority)
+	{
+		global $database;
+		
+		$stmt = $database->runQueryCommon('SELECT *
+			FROM gmlist
+			WHERE mName = ?');
+		$stmt->bindParam(1, $mName, PDO::PARAM_STR);
+		$stmt->execute();
+		$result = $stmt->fetchAll();
+		
+		if($result)
+		{
+			$stmt = $database->runQueryCommon("UPDATE gmlist SET mAuthority = ? WHERE mName = ?");
+			$stmt->bindParam(1, $mAuthority, PDO::PARAM_STR);
+			$stmt->bindParam(2, $mName, PDO::PARAM_STR);
+			$stmt->execute();
+		}
+		else
+		{
+			$stmt = $database->runQueryCommon("INSERT INTO gmlist (mAccount, mName, mAuthority) VALUES (:mAccount, :mName, :mAuthority)");
+			$stmt->execute(array(':mAccount'=>$mAccount, ':mName'=>$mName, ':mAuthority'=>$mAuthority));
+		}
+		
+		$x = "PLAYER";
+		
+		$stmt = $database->runQueryCommon('DELETE FROM gmlist WHERE mAuthority = ?');
+		$stmt->bindParam(1, $x, PDO::PARAM_STR);
+		$stmt->execute();
+	}
+	
+	function update_empire($id, $empire)
+	{
+		global $database;
+		
+		$stmt = $database->runQueryPlayer("UPDATE player_index SET empire = ? WHERE id = ?");
+		$stmt->bindParam(1, $empire, PDO::PARAM_INT);
+		$stmt->bindParam(2, $id, PDO::PARAM_INT);
+		$stmt->execute();
+	}
+	
+	function get_web_admin_level($id)
+	{
+		global $database;
+		
+		$stmt = $database->runQueryAccount("SELECT web_admin FROM account WHERE id=:id");
+		$stmt->bindParam(':id', $id, PDO::PARAM_INT);
+		$stmt->execute();
+		$result=$stmt->fetch(PDO::FETCH_ASSOC);
+		
+		return $result['web_admin'];
+	}
+	
+	function updateWebAdmin($id, $admin)
+	{
+		global $database;
+
+		$stmt = $database->runQueryAccount("UPDATE account SET web_admin = ? WHERE id=?");
+		$stmt->bindParam(1, $admin, PDO::PARAM_INT);
+		$stmt->bindParam(2, $id, PDO::PARAM_INT);
+		$stmt->execute();
+	}
+	
+	function generateRedeemCode($length = 7) {
+		$characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		$charactersLength = strlen($characters);
+		$randomString = '';
+		for ($i = 0; $i < $length; $i++) {
+			$randomString .= $characters[rand(0, $charactersLength - 1)];
+		}
+		return $randomString;
+	}
+	
+	function check_redeem_codes($code)
+	{
+		global $database;
+
+		$stmt = $database->runQuerySqlite("SELECT id FROM redeem WHERE code = ?");
+		$stmt->bindParam(1, $code, PDO::PARAM_STR);
+		$stmt->execute();
+		$check = $stmt->fetchAll();
+
+		if(count($check))
+			return true;
+		else return false;
+	}
+	
+	function addRedeemCode($type, $value)
+	{
+		global $database;
+
+		$ok = false;
+		
+		while(!$ok)
+		{
+			$code = generateRedeemCode(16);
+			
+			if(!check_redeem_codes($code))
+				$ok = true;
+		}
+		
+		$stmt = $database->runQuerySqlite("INSERT INTO redeem (code, type, value) VALUES (:code, :type, :value)");
+		$stmt->execute(array(':code'=>$code, ':type'=>$type, ':value'=>$value));
+		
+		return $code;
+	}
+	
+	function delete_redeeem_code($id)
+	{
+		global $database;
+		
+		$stmt = $database->runQuerySqlite('DELETE FROM redeem WHERE id = ?');
+		$stmt->bindParam(1, $id, PDO::PARAM_INT);
+		$stmt->execute();
+	}
+	
+	function getRedeem($code)
+	{
+		global $database;
+
+		$stmt = $database->runQuerySqlite("SELECT * FROM redeem WHERE code = ? LIMIT 1");
+		$stmt->bindParam(1, $code, PDO::PARAM_STR);
+		$stmt->execute();
+		$result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+		return $result;
 	}
 ?>

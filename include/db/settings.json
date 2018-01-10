@@ -2,7 +2,8 @@
    "general":{
       "title":"Metin2 CMS",
       "news":"5",
-	  "paypal":""
+	  "paypal":"",
+	  "currency":"EUR"
    },
    "links":{
       "forum":"",

@@ -66,7 +66,7 @@
 						<tbody>
 						<?php $j=-1; foreach($jsondataDonate[$i]['list'] as $key => $price) { $j++; ?>
 							<tr>
-								<th scope="row"><?php print $lang['price'].' : '.$price['price'].' &euro;'; ?></th>
+								<th scope="row"><?php print $lang['price'].' : '.$price['price'].' '.$currency; ?></th>
 								<td><?php print $price['md'].' MD'; ?></td>
 								<td>
 									<form action="" method="post">

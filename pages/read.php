@@ -7,7 +7,7 @@
     </div>
 	<?php	
 		if(!$offline && $database->is_loggedin())
-			if($web_admin>=$news_lvl)
+			if($web_admin>=$jsondataPrivileges['news'])
 				include 'include/functions/edit-news.php';
 	?>
     <div class="bd-c">
@@ -15,7 +15,7 @@
 			<h2 class="blog-title"><?php print $article['title']; ?>
 			<?php
 				if(!$offline && $database->is_loggedin())
-					if($web_admin>=$news_lvl)
+					if($web_admin>=$jsondataPrivileges['news'])
 					{
 			?>
 			<a href="<?php print $site_url; ?>?delete=<?php print $read_id; ?>" onclick="return confirm('<?php print $lang['sure?']; ?>');"><i style="color:red;" class="fa fa-trash-o fa-2" aria-hidden="true"></i></a>

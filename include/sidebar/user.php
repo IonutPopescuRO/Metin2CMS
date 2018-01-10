@@ -27,8 +27,9 @@
 			<?php } else { ?>
 			<div class="list-group">
 				<?php if($web_admin) { ?>
-				<a href="<?php print $site_url; ?>admin" class="list-group-item list-group-item-action"><?php print $lang['administration']; ?><?php if(checkUpdate(officialVersion())) print ' <span class="tag tag-info tag-pill float-xs-right">'.$lang['update-available'].'</span>'; ?></a>
+				<a href="<?php print $site_url; ?>admin" class="list-group-item list-group-item-action"><?php print $lang['administration']; ?><?php if($web_admin>=9 && checkUpdate(officialVersion())) print ' <span class="tag tag-info tag-pill float-xs-right">'.$lang['update-available'].'</span>'; ?></a>
 				<?php 
+					if($web_admin>=$jsondataPrivileges['donate']) {
 						$count_donations = count(get_donations());
 						if($count_donations)
 						{
@@ -36,11 +37,15 @@
 				<a href="<?php print $site_url; ?>admin/donatelist" class="list-group-item list-group-item-action"><?php print $lang['donatelist']; ?> <span class="tag tag-info tag-pill float-xs-right"><?php print $count_donations.' '.$lang['new-donations']; ?> </span></a>
 				<?php
 						}
-					} 
+					}
+				}
 				?>
 				<a href="<?php print $site_url; ?>user/administration" class="list-group-item list-group-item-action"><?php print $lang['account-data']; ?></a>
 				<a href="<?php print $site_url; ?>user/characters" class="list-group-item list-group-item-action"><?php print $lang['chars-list']; ?></a>
-				<?php if($item_shop!="") { ?>
+				<a href="<?php print $site_url; ?>user/redeem" class="list-group-item list-group-item-action"><?php print $lang['redeem-codes']; ?></a>
+				<?php if($jsondataFunctions['active-referrals']) { ?>
+				<a href="<?php print $site_url; ?>user/referrals" class="list-group-item list-group-item-action"><?php print $lang['referrals']; ?></a>
+				<?php } if($item_shop!="") { ?>
 				<a target='_blank' href="<?php print $item_shop; ?>" class="list-group-item list-group-item-action"><?php print $lang['item-shop']; ?></a>
 				<?php }
 					$vote4coins = file_get_contents('include/db/vote4coins.json');

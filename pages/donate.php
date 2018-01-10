@@ -47,7 +47,7 @@
 							<div class="col-sm-6">
 								<select class="form-control" name="type">
 								<?php $j=-1; foreach($jsondataDonate[$i]['list'] as $key => $price) { $j++; ?>
-									<option value="<?php print $j; ?>"><?php print $lang['price'].' '.$price['price'].' &euro; - '.$price['md'].' MD'; ?></option>
+									<option value="<?php print $j; ?>"><?php print $lang['price'].' '.$price['price'].' '.$currency.' - '.$price['md'].' MD'; ?></option>
 								<?php } ?>
 								</select>
 							</div>
@@ -64,7 +64,7 @@
 							<div class="col-sm-6">
 								<select class="form-control" name="type">
 								<?php $j=-1; foreach($jsondataDonate[$i]['list'] as $key => $price) { $j++; ?>
-									<option value="<?php print $j; ?>"><?php print $lang['price'].' '.$price['price'].' &euro; - '.$price['md'].' MD'; ?></option>
+									<option value="<?php print $j; ?>"><?php print $lang['price'].' '.$price['price'].' '.$currency.' - '.$price['md'].' MD'; ?></option>
 								<?php } ?>
 								</select>
 							</div>

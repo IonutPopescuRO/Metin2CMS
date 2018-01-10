@@ -1,0 +1,94 @@
+{
+   "EUR":{
+      "name":"Euro",
+      "code":"&euro;"
+   },
+   "USD":{
+      "name":"U.S. Dollar",
+      "code":"$"
+   },
+   "GBP":{
+      "name":"Pound Sterling",
+      "code":"&pound;"
+   },
+   "AUD":{
+      "name":"Australian Dollar",
+      "code":"$"
+   },
+   "BRL":{
+      "name":"Brazilian Real",
+      "code":"<b>$</b>"
+   },
+   "CAD":{
+      "name":"Canadian Dollar",
+      "code":"$"
+   },
+   "CZK":{
+      "name":"Czech Koruna",
+      "code":"Kč"
+   },
+   "DKK":{
+      "name":"Danish Krone",
+      "code":"kr."
+   },
+   "HKD":{
+      "name":"Hong Kong Dollar",
+      "code":"HK$"
+   },
+   "HUF":{
+      "name":"Hungarian Forint",
+      "code":"Ft"
+   },
+   "ILS":{
+      "name":"Israeli New Sheqel",
+      "code":"&#8362;"
+   },
+   "JPY":{
+      "name":"Japanese Yen",
+      "code":"&yen;"
+   },
+   "MYR":{
+      "name":"Malaysian Ringgit",
+      "code":"$"
+   },
+   "MXN":{
+      "name":"Mexican Peso",
+      "code":"$"
+   },
+   "NOK":{
+      "name":"Norwegian Krone",
+      "code":"kr"
+   },
+   "NZD":{
+      "name":"New Zealand Dollar",
+      "code":"$"
+   },
+   "PHP":{
+      "name":"Philippine Peso",
+      "code":"&#8369;"
+   },
+   "PLN":{
+      "name":"Polish Zloty",
+      "code":"zł"
+   },
+   "SGD":{
+      "name":"Singapore Dollar",
+      "code":"S$"
+   },
+   "SEK":{
+      "name":"Swedish Krona",
+      "code":"kr"
+   },
+   "CHF":{
+      "name":"Swiss Franc",
+      "code":"Fr."
+   },
+   "TWD":{
+      "name":"Taiwan New Dollar",
+      "code":"NT$"
+   },
+   "THB":{
+      "name":"Thai Baht",
+      "code":"&#3647;"
+   }
+}

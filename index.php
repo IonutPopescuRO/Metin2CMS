@@ -17,7 +17,9 @@
     <link rel="stylesheet" href="<?php print $site_url; ?>css/bootstrap.min.css">
     <link rel="stylesheet" href="<?php print $site_url; ?>css/font-awesome.min.css">
     <link rel='stylesheet' href='<?php print $site_url; ?>css/style.css' type='text/css' media='all' />
-		
+	<?php if($page=="admin" && $a_page=="player_edit") { ?>
+    <link rel='stylesheet' href='<?php print $site_url; ?>css/bootstrap-select.css'/>
+	<?php } ?>
 	<link rel="shortcut icon" href="<?php print $site_url; ?>images/favicon.ico?v=" />
 </head>
 
@@ -111,32 +113,32 @@
         <div class="footer-nav">
             <div class="page-width">
                 <div class="page-padding">
-				<?php if($social_links) { ?>
-                    <div class="social cms2-g">
-                        <div class="cms2-u">
-                            <ul class="cms2-g">
-                                <?php print $social_links; ?>
-                            </ul>
-                        </div>
-                    </div>
-				<?php } ?>
-				
-                <p class="cms2-u copyright">
-					<div class="row">
-						<div class="col-md-8">
-							&copy; Copyright <?php 
-													$copyright_year = date('Y');
-													if($copyright_year > 2017)
-														print '2017 - '.$copyright_year;
-													else print $copyright_year;
-													print ' '.$site_title;
-												?>
+					<?php if($social_links) { ?>
+						<div class="social cms2-g">
+							<div class="cms2-u">
+								<ul class="cms2-g">
+									<?php print $social_links; ?>
+								</ul>
+							</div>
 						</div>
-						<div class="col-md-4">
-							<p style="text-align: right">Powered by <a href="https://metin2cms.cf/">Metin2CMS <?php print $mt2cms; ?></a></p>
+					<?php } ?>
+					
+					<p class="cms2-u copyright">
+						<div class="row">
+							<div class="col-md-8">
+								&copy; Copyright <?php 
+														$copyright_year = date('Y');
+														if($copyright_year > 2017)
+															print '2017 - '.$copyright_year;
+														else print $copyright_year;
+														print ' '.$site_title;
+													?>
+							</div>
+							<div class="col-md-4">
+								<p style="text-align: right">Powered by <a href="https://metin2cms.cf/">Metin2CMS <?php print $mt2cms; ?></a></p>
+							</div>
 						</div>
-					</div>
-				</p>
+					</p>
                 </div>
             </div>
         </div>

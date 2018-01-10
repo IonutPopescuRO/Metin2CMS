@@ -27,7 +27,12 @@
 		
 		if(!count($errors))
 		{
-			if($database->register($_POST['username'],$_POST['password'],$_POST['email'])){	
+			$ref = isset($_GET['ref']) ? $_GET['ref'] : null;
+			
+			if(!$jsondataFunctions['active-referrals'])
+				$ref=null;
+			
+			if($database->register($_POST['username'],$_POST['password'],$_POST['email'],$ref)){	
 				print '<div class="alert alert-success" role="alert">
 					  <h4 class="alert-heading">'.$lang['success'].'!</h4>
 					  <p>'.$lang['success-register'].'</p>

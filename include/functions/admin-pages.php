@@ -52,6 +52,22 @@
 			$a_page = 'donatelist';
 			$a_title = $lang['donatelist'];
 			break;
+		case 'privileges':
+			$a_page = 'privileges';
+			$a_title = $lang['privileges'];
+			break;
+		case 'coins':
+			$a_page = 'coins';
+			$a_title = $lang['add-coins'];
+			break;
+		case 'referrals':
+			$a_page = 'referrals';
+			$a_title = $lang['referrals'];
+			break;
+		case 'redeem':
+			$a_page = 'redeem';
+			$a_title = $lang['redeem-codes'];
+			break;
 		default:
 			$a_page = 'home';
 			$a_title = $lang['admin-panel'];

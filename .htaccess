@@ -4,6 +4,8 @@ RewriteEngine On
 RewriteCond %{SCRIPT_FILENAME} !-d
 RewriteCond %{SCRIPT_FILENAME} !-f
 
+RewriteRule ^users/register/(.*)/ index.php?p=register&ref=$1
+RewriteRule ^users/register/(.*) index.php?p=register&ref=$1
 RewriteRule ^users/register ./index.php?p=register
 RewriteRule ^users/login ./index.php?p=login
 RewriteRule ^users/logout ./index.php?p=logout
@@ -59,8 +61,9 @@ RewriteRule ^admin/log/(.*)/ index.php?p=admin&a=log&log=$1
 RewriteRule ^admin/log/(.*) index.php?p=admin&a=log&log=$1
 
 RewriteRule ^admin/functions index.php?p=admin&a=functions
-
 RewriteRule ^admin/createitems index.php?p=admin&a=createitems
+RewriteRule ^admin/privileges index.php?p=admin&a=privileges
+RewriteRule ^admin/coins index.php?p=admin&a=coins
 
 RewriteRule ^admin/players/(.*)/(.*)/ index.php?p=admin&a=players&page_no=$1&player_name=$2
 RewriteRule ^admin/players/(.*)/(.*) index.php?p=admin&a=players&page_no=$1&player_name=$2
@@ -68,6 +71,11 @@ RewriteRule ^admin/players/(.*)/ index.php?p=admin&a=players&page_no=$1
 RewriteRule ^admin/players/(.*) index.php?p=admin&a=players&page_no=$1
 RewriteRule ^admin/players/ index.php?p=admin&a=players
 RewriteRule ^admin/players index.php?p=admin&a=players
+
+RewriteRule ^admin/redeem/(.*)/ index.php?p=admin&a=redeem&page_no=$1
+RewriteRule ^admin/redeem/(.*) index.php?p=admin&a=redeem&page_no=$1
+RewriteRule ^admin/redeem/ index.php?p=admin&a=redeem
+RewriteRule ^admin/redeem index.php?p=admin&a=redeem
 
 RewriteRule ^admin/player/edit/(.*)/ index.php?p=admin&a=player_edit&id=$1
 RewriteRule ^admin/player/edit/(.*) index.php?p=admin&a=player_edit&id=$1
@@ -85,3 +93,9 @@ RewriteRule ^admin index.php?p=admin
 
 RewriteRule ^download/ index.php?p=download
 RewriteRule ^download index.php?p=download
+
+RewriteRule ^user/referrals/ index.php?p=referrals
+RewriteRule ^user/referrals index.php?p=referrals
+
+RewriteRule ^user/redeem/ index.php?p=redeem
+RewriteRule ^user/redeem index.php?p=redeem

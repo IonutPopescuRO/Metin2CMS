@@ -1,6 +1,6 @@
 <?php
 	include 'include/functions/header.php';
-	
+
 	if (isset($_POST["txn_id"]) && isset($_POST["txn_type"]) && isset($_POST["item_name"]) && isset($_POST["item_number"]) && isset($_POST["payment_status"]) && isset($_POST["mc_gross"])&& isset($_POST["mc_currency"])&& isset($_POST["receiver_email"])&& isset($_POST["custom"]))
 	{
 		$req = 'cmd=_notify-validate';
@@ -9,7 +9,7 @@
 			$value = preg_replace('/(.*[^%^0^D])(%0A)(.*)/i','${1}%0D%0A${3}',$value);// IPN fix
 			$req .= "&$key=$value";
 		}
-		
+
 		$data['item_name']			= $_POST['item_name'];
 		$data['item_number'] 		= $_POST['item_number'];
 		$data['payment_status'] 	= $_POST['payment_status'];
@@ -37,8 +37,8 @@
 		$curl_result = curl_exec($ch);
 		$curl_err = curl_error($ch);
 		curl_close($ch);
-		
-		if (strpos($curl_result, "VERIFIED")!==false) {
+				
+		if (strpos($curl_result, "VERIFIED")!==false && strtolower($data['receiver_email']) == strtolower($paypal_email) && $jsondata['general']['currency']==$data['payment_currency']) {
 			
 			$jsondataDonate = file_get_contents('include/db/donate.json');
 			$jsondataDonate = json_decode($jsondataDonate, true);

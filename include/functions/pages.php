@@ -60,6 +60,14 @@
 			$page = 'donate';
 			$title = $lang['donate'];
 			break;
+		case 'referrals':
+			$page = 'referrals';
+			$title = $lang['referrals'];
+			break;
+		case 'redeem':
+			$page = 'redeem';
+			$title = $lang['redeem-codes'];
+			break;
 		default:
 			$page = 'news';
 			$title = $lang['news'];

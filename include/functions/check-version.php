@@ -1,5 +1,6 @@
 <?php
 	$lastVersion = officialVersion();
+
 	$failed = '<div class="alert alert-danger" role="alert">'.$lang['not-updated'].': <a href="https://new.metin2cms.cf/v2/'.$lastVersion.'.zip" class="tag tag-success">'.$lang['update'].'</a></div>';
 	
 	if(checkUpdate($lastVersion))

@@ -20,6 +20,9 @@ class USER
 		$player = $database->dbConnection($host, "player", $user, $password);
 		$this->player = $player;
 		
+		$common = $database->dbConnection($host, "common", $user, $password);
+		$this->common = $common;
+		
 		$sqlite = $database->dbConnection("", "", "", "", "yes");
 		$this->sqlite = $sqlite;
 		
@@ -36,6 +39,12 @@ class USER
 	public function runQueryPlayer($sql)
 	{
 		$stmt = $this->player->prepare($sql);
+		return $stmt;
+	}
+	
+	public function runQueryCommon($sql)
+	{
+		$stmt = $this->common->prepare($sql);
 		return $stmt;
 	}
 	
@@ -57,7 +66,7 @@ class USER
 		return $stmt;
 	}
 	
-	public function register($username,$password,$email)
+	public function register($username,$password,$email,$ref)
 	{
 		global $safebox_size;
 		
@@ -89,6 +98,9 @@ class USER
 			$stmt->bindparam(":password", $safebox_password);
 				
 			$stmt->execute();
+			
+			if($ref && count(getAccountInfo($ref)))
+				addReferral($lastId, $ref);
 			
 			return $stmt;
 		}

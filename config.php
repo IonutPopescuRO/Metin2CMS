@@ -7,9 +7,6 @@
 	$user = "root";
 	$password = "xxxxxx";
 	
-	//Privileges - web_admin minim level for use admin functions
-	$news_lvl = 1;
-	
 	//Mail settings
 	$SMTPAuth = true;
 	$SMTPSecure = "tls";

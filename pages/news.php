@@ -7,7 +7,7 @@
     </div>
 	<?php
 		if(!$offline && $database->is_loggedin())
-			if($web_admin>=$news_lvl)
+			if($web_admin>=$jsondataPrivileges['news'])
 				include 'include/functions/add-news.php';
 	?>
     <div class="bd-c">
@@ -16,7 +16,7 @@
 				$query = "SELECT * FROM news ORDER BY id DESC";
 				$records_per_page=intval(getJsonSettings("news"));
 				$newquery = $paginate->paging($query,$records_per_page);
-				$paginate->dataview($newquery, $lang['sure?'], $web_admin, $news_lvl, $site_url, $lang['read-more']);
+				$paginate->dataview($newquery, $lang['sure?'], $web_admin, $jsondataPrivileges['news'], $site_url, $lang['read-more']);
 				$paginate->paginglink($query,$records_per_page,$lang['first-page'],$lang['last-page'],$site_url);		
 			?>
         </ul>
