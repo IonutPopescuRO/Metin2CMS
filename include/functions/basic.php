@@ -911,7 +911,8 @@
 		$officialVersion = '';
 		$officialVersion = @file_get_contents('https://new.metin2cms.cf/v2/last_version.php');
 		$officialVersion = str_replace('.', '', $officialVersion);
-		
+		if($officialVersion==291)
+			$officialVersion=210;
 		return $officialVersion;
 	}
 	
