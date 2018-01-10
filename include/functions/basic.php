@@ -910,9 +910,7 @@
 	{
 		$officialVersion = '';
 		$officialVersion = @file_get_contents('https://new.metin2cms.cf/v2/last_version.php');
-		$officialVersion = str_replace('.', '', $officialVersion);
-		if($officialVersion==291)
-			$officialVersion=210;
+
 		return $officialVersion;
 	}
 	
@@ -920,6 +918,10 @@
 	{
 		global $mt2cms;
 		$version = str_replace('.', '', $mt2cms);
+		
+		$lastVersion = str_replace('.', '', $lastVersion);
+		if($lastVersion==291)
+			$lastVersion=210;
 		
 		if($lastVersion && $lastVersion!='' && $lastVersion > $version)
 			return 1;
