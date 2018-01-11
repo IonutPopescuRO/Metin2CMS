@@ -43,10 +43,7 @@ INSTALATION
 	
 	//Site url - add / at the end, eg: http://metin2cms.cf/mt2/
 	$site_url = "http://metin2cms.cf/mt2/";
-	
-	//Privileges - web_admin minim level for use admin functions
-	$news_lvl = 1;
-	
+
 	//Mail settings
 	$SMTPAuth = true;
 	$SMTPSecure = "tls";
