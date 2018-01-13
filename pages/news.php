@@ -12,7 +12,17 @@
 	?>
     <div class="bd-c">
         <ul class='blogroll'>
-			<?php 
+				<?php
+				if (version_compare($php_version = phpversion(), '5.6.0', '<')) {
+				?>
+				<div class="alert alert-danger alert-dismissible fade in" role="alert">
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<span>Metin2CMS works with a PHP version >= 5.6.0. At this time, the server is running version <?php print $php_version; ?>.</span>
+				</div>
+				<?php
+				} 
 				$query = "SELECT * FROM news ORDER BY id DESC";
 				$records_per_page=intval(getJsonSettings("news"));
 				$newquery = $paginate->paging($query,$records_per_page);
