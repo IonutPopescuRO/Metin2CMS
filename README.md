@@ -21,12 +21,13 @@ The platform is available in 8 languages:
 
   - [en]	English 	
   - [ro] 	Română 	
-  - [hu] 	Magyar 	
   - [fr] 	Français 	
   - [pl] 	Polski 	
   - [pt-BR] 	Português (BR) 	
   - [es] 	Español 	
   - [it] 	Italiano
+  - [hu] 	Magyar 	
+  - [de] 	Deutsch
   
 If you want to help, you can translate in your language and send us.
 
