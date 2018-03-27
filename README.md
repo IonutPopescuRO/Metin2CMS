@@ -17,7 +17,7 @@ Communication with the database of the cms is done using the PDO extension. Sett
 
 LANGUAGES
 ------------
-The platform is available in 9 languages:
+The platform is available in 10 languages:
 
   - [en]	English 	
   - [ro] 	Română 	
@@ -28,6 +28,7 @@ The platform is available in 9 languages:
   - [it] 	Italiano
   - [hu] 	Magyar 	
   - [de] 	Deutsch
+  - [el] 	Ελληνικά
   
 If you want to help, you can translate in your language and send us.
 
@@ -47,9 +48,9 @@ INSTALATION
 
 	//Mail settings
 	$SMTPAuth = true;
-	$SMTPSecure = "tls";
+	$SMTPSecure = "ssl";
 	$EmailHost = "smtp.gmail.com";
-	$emailPort = 587;
+	$emailPort = 465;
 	
 	$email_username = "metin2cms.cf@gmail.com";//gmail account
 	$email_password = "xxxxxx";//gmail password
