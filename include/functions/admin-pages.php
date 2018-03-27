@@ -68,6 +68,10 @@
 			$a_page = 'redeem';
 			$a_title = $lang['redeem-codes'];
 			break;
+		case 'reward':
+			$a_page = 'reward';
+			$a_title = $lang['reward-players'];
+			break;
 		default:
 			$a_page = 'home';
 			$a_title = $lang['admin-panel'];

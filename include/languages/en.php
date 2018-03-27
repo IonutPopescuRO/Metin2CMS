@@ -244,6 +244,10 @@ $lang = array(
 	'redeem-code-info' => 'Create codes that players can redeem.',
 	'code-created' => 'The code created is:',
 	'type' => 'Type',
-	'incorrect-redeem' => 'The entered code is incorrect or has already been used.'
+	'incorrect-redeem' => 'The entered code is incorrect or has already been used.',
+	
+	//v2.11
+	'reward-players' => 'Reward players',
+	'reward-players-info' => 'Send a gift item in the game.'
 	);
 ?>

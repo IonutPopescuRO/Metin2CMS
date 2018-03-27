@@ -1117,7 +1117,7 @@
 	{
 		global $database;
 		
-		$stmt = $database->runQuerySqlite("SELECT date FROM vote4coins WHERE site = ? AND account_ip = ?");
+		$stmt = $database->runQuerySqlite("SELECT date FROM vote4coins WHERE site = ? AND account_ip = ? ORDER BY date DESC LIMIT 1");
 		$stmt->bindParam(1, $id, PDO::PARAM_INT);
 		$stmt->bindParam(2, $ip, PDO::PARAM_STR);
 		$stmt->execute();
@@ -1125,7 +1125,7 @@
 		
 		if($result)
 			return $result[0];
-		else return false;
+		else return "0000-00-00 00:00";
 	}
 	
 	function check_date_vote4coins_account($id)
@@ -1140,7 +1140,7 @@
 
 		if($result)
 			return $result[0];
-		else return false;
+		else return "0000-00-00 00:00";
 	}
 	
 	function get_account_ip() {
@@ -1302,7 +1302,7 @@
 	{
 		switch ($key) {
 			case 'players-online':
-				return countOnlinePlayers_minute(5);
+				return countOnlinePlayers_minute(10);
 				break;
 			case 'accounts-created':
 				return getAccountsTotalNumber();
@@ -1713,6 +1713,9 @@
 			case 'redeem':
 				$page = 'redeem-codes';
 				break;
+			case 'reward':
+				$page = 'reward-players';
+				break;
 		}
 		
 		if($page=='privileges')
@@ -1979,6 +1982,27 @@
 		$stmt->bindParam(1, $code, PDO::PARAM_STR);
 		$stmt->execute();
 		$result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+		return $result;
+	}
+	
+	//v2.11
+	function add_item_award($account_id, $vnum, $count, $socket0, $socket1, $socket2)
+	{
+		global $database;
+		
+		$stmt = $database->runQueryPlayer('INSERT INTO item_award(login, vnum, count, given_time, socket0, socket1, socket2, mall) VALUES (?,?,?,NOW(),?,?,?,?)');
+		$stmt->execute(array(getAccountName($account_id), $vnum, $count, $socket0, $socket1, $socket2, 1));
+	}
+		
+	function getOnlinePlayers_minute($m)
+	{
+		global $database;
+		
+		$stmt = $database->runQueryPlayer("SELECT account_id FROM player WHERE DATE_SUB(NOW(), INTERVAL ? MINUTE) < last_play");
+		$stmt->bindParam(1, $m, PDO::PARAM_INT);
+		$stmt->execute(); 
+		$result = $stmt->fetchAll();
 
 		return $result;
 	}

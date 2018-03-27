@@ -17,7 +17,7 @@
 				</span>
 			</div>
 		</form>
-		<?php if(count($referrals_list)) { ?>
+		<?php if(is_array($referrals_list) && count($referrals_list)) { ?>
 		<hr/>
 		<div class="jumbotron jumbotron-fluid">
 			<div class="container">

@@ -18,16 +18,6 @@
 				</div>
 			</div>
 		<?php } ?>
-		<div class="form-group row">
-			<label for="<?php print $name; ?>" class="col-sm-2 col-form-label"><?php print $lang['currency']; ?></label>
-			<div class="col-sm-10">
-				<select class="form-control" name="currency">
-					<?php foreach($jsondataCurrency as $key => $currency) { ?>
-					<option value="<?php print $key; ?>"<?php if($site_general['currency']==$key) print ' selected="selected"'; ?>><?php print $currency['name']; ?></option>
-					<?php } ?>
-				</select>
-			</div>
-		</div>
 		<?php foreach($links_header as $name => $link) { ?>
 			<div class="form-group row">
 				<label for="<?php print $name; ?>" class="col-sm-2 col-form-label"><?php if($name=='support') print $lang['support']; else print ucfirst($name); ?></label>

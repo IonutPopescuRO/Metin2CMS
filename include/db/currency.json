@@ -1,94 +1,122 @@
 {
    "EUR":{
       "name":"Euro",
-      "code":"&euro;"
+      "code":"&euro;",
+	  "paypal":"1"
+   },
+   "RON":{
+      "name":"Lei",
+      "code":"Lei",
+	  "paypal":"0"
    },
    "USD":{
       "name":"U.S. Dollar",
-      "code":"$"
+      "code":"$",
+	  "paypal":"1"
    },
    "GBP":{
       "name":"Pound Sterling",
-      "code":"&pound;"
+      "code":"&pound;",
+	  "paypal":"1"
    },
    "AUD":{
       "name":"Australian Dollar",
-      "code":"$"
+      "code":"$",
+	  "paypal":"1"
    },
    "BRL":{
       "name":"Brazilian Real",
-      "code":"<b>$</b>"
+      "code":"<b>$</b>",
+	  "paypal":"1"
    },
    "CAD":{
       "name":"Canadian Dollar",
-      "code":"$"
+      "code":"$",
+	  "paypal":"1"
    },
    "CZK":{
       "name":"Czech Koruna",
-      "code":"Kč"
+      "code":"Kč",
+	  "paypal":"1"
    },
    "DKK":{
       "name":"Danish Krone",
-      "code":"kr."
+      "code":"kr.",
+	  "paypal":"1"
    },
    "HKD":{
       "name":"Hong Kong Dollar",
-      "code":"HK$"
+      "code":"HK$",
+	  "paypal":"1"
    },
    "HUF":{
       "name":"Hungarian Forint",
-      "code":"Ft"
+      "code":"Ft",
+	  "paypal":"1"
    },
    "ILS":{
       "name":"Israeli New Sheqel",
-      "code":"&#8362;"
+      "code":"&#8362;",
+	  "paypal":"1"
    },
    "JPY":{
       "name":"Japanese Yen",
-      "code":"&yen;"
+      "code":"&yen;",
+	  "paypal":"1"
    },
    "MYR":{
       "name":"Malaysian Ringgit",
-      "code":"$"
+      "code":"$",
+	  "paypal":"1"
    },
    "MXN":{
       "name":"Mexican Peso",
-      "code":"$"
+      "code":"$",
+	  "paypal":"1"
    },
    "NOK":{
       "name":"Norwegian Krone",
-      "code":"kr"
+      "code":"kr",
+	  "paypal":"1"
    },
    "NZD":{
       "name":"New Zealand Dollar",
-      "code":"$"
+      "code":"$",
+	  "paypal":"1"
    },
    "PHP":{
       "name":"Philippine Peso",
-      "code":"&#8369;"
+      "code":"&#8369;",
+	  "paypal":"1"
    },
    "PLN":{
       "name":"Polish Zloty",
-      "code":"zł"
+      "code":"zł",
+	  "paypal":"1"
    },
    "SGD":{
       "name":"Singapore Dollar",
-      "code":"S$"
+      "code":"S$",
+	  "paypal":"1"
    },
    "SEK":{
       "name":"Swedish Krona",
-      "code":"kr"
+      "code":"kr",
+	  "paypal":"1"
    },
    "CHF":{
       "name":"Swiss Franc",
-      "code":"Fr."
+      "code":"Fr.",
+	  "paypal":"1"
    },
    "TWD":{
       "name":"Taiwan New Dollar",
-      "code":"NT$"
+      "code":"NT$",
+	  "paypal":"1"
    },
    "THB":{
       "name":"Thai Baht",
-      "code":"&#3647;"
+      "code":"&#3647;",
+	  "paypal":"1"
    }
 }

@@ -106,7 +106,8 @@ class USER
 		}
 		catch(PDOException $e)
 		{
-			echo $e->getMessage();
+			//echo $e->getMessage();
+			print 'ERROR';
 		}
 	}
 	
@@ -144,7 +145,8 @@ class USER
 		}
 		catch(PDOException $e)
 		{
-			echo $e->getMessage();
+			//echo $e->getMessage();
+			print 'ERROR';
 		}
 	}
 	
@@ -168,7 +170,8 @@ class USER
 		}
 		catch(PDOException $e)
 		{
-			echo $e->getMessage();
+			//echo $e->getMessage();
+			print 'ERROR';
 		}
 	}
 	
@@ -186,7 +189,8 @@ class USER
 		}
 		catch(PDOException $e)
 		{
-			echo $e->getMessage();
+			//echo $e->getMessage();
+			print 'ERROR';
 		}
 	}
 	
@@ -204,7 +208,8 @@ class USER
 		}
 		catch(PDOException $e)
 		{
-			echo $e->getMessage();
+			//echo $e->getMessage();
+			print 'ERROR';
 		}
 	}
 	

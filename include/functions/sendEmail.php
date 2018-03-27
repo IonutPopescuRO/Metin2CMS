@@ -1,6 +1,9 @@
 <?php
-	require 'include/mailer/PHPMailerAutoload.php';
-
+	require 'include/mailer/PHPMailer.php';
+	require 'include/mailer/SMTP.php';
+	require 'include/mailer/Exception.php';
+	use PHPMailer\PHPMailer\PHPMailer;
+	
 	$email_name = 'noreplay';
 	
 	$site_name = $_SERVER['SERVER_NAME'];
@@ -9,11 +12,11 @@
 	
 	$mail             = new PHPMailer();
 	$mail->IsSMTP();
-	$mail->SMTPDebug  = 0;						// enables SMTP debug information (for testing)
-												// 1 = errors and messages
-												// 2 = messages only
-												
-	$mail->CharSet = 'UTF-8';						// for special chars
+	$mail->SMTPDebug  = 0;							// enables SMTP debug information (for testing)
+													// 1 = errors and messages
+													// 2 = messages only
+	$mail->Timeout	  =	30;							// set the timeout (seconds)
+	$mail->CharSet    = 'UTF-8';					// for special chars
 	$mail->SMTPAuth   = $SMTPAuth;					// enable SMTP authentication
 	$mail->SMTPSecure = $SMTPSecure;				// sets the prefix to the servier
 	$mail->Host       = $EmailHost;					// sets GMAIL as the SMTP server

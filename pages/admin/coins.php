@@ -1,5 +1,4 @@
 <div class="container">
-
 	<?php 
 	if(isset($added)) {
 		if($added==1) {
@@ -39,7 +38,7 @@
 				<input class="form-control" name="coins" value="0" type="number" required>
 			</div>
 		</div>
-		<div class="form-group row">
+		<div class="form-group">
 			<button type="submit" name="submit" class="btn btn-primary"><?php print $lang['add-coins']; ?></button>
 		</div>
 	</form>

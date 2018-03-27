@@ -3,6 +3,12 @@
 		case 'news':
 			$page = 'news';
 			$title = $lang['news'];
+			include 'include/functions/news.php';
+			break;
+		case 'read':
+			$page = 'read';
+			$title = '';
+			include 'include/functions/news.php';
 			break;
 		case 'register':
 			$page = 'register';
@@ -23,10 +29,6 @@
 		case 'administration':
 			$page = 'administration';
 			$title = $lang['administration'];
-			break;
-		case 'read':
-			$page = 'read';
-			$title = '';
 			break;
 		case 'lost':
 			$page = 'lost';
@@ -71,5 +73,6 @@
 		default:
 			$page = 'news';
 			$title = $lang['news'];
+			include 'include/functions/news.php';
 	}
 ?>

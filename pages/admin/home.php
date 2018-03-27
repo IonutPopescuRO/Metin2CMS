@@ -96,6 +96,11 @@
 		<h5 class="list-group-item-heading"><i class="fa fa-dollar fa-1" aria-hidden="true"></i> <?php print $lang['add-coins']; ?></h5>
 		<p class="list-group-item-text"><?php print $lang['add-coins-info']; ?></p>
 	</a>
+	<?php } if($web_admin>=$jsondataPrivileges['reward-players'] && check_table_in_player("item_award")) { ?>
+	<a href="<?php print $site_url; ?>admin/reward" class="list-group-item list-group-item-action">
+		<h5 class="list-group-item-heading"><i class="fa fa-gift fa-1" aria-hidden="true"></i> <?php print $lang['reward-players']; ?></h5>
+		<p class="list-group-item-text"><?php print $lang['reward-players-info']; ?></p>
+	</a>
 	<?php } ?>
 </div>
 <?php } if($web_admin>=$jsondataPrivileges['cms-management']) { ?>

@@ -38,7 +38,7 @@
 		$curl_err = curl_error($ch);
 		curl_close($ch);
 				
-		if (strpos($curl_result, "VERIFIED")!==false && strtolower($data['receiver_email']) == strtolower($paypal_email) && $jsondata['general']['currency']==$data['payment_currency']) {
+		if (strpos($curl_result, "VERIFIED")!==false && strtolower($data['receiver_email']) == strtolower($paypal_email)) {
 			
 			$jsondataDonate = file_get_contents('include/db/donate.json');
 			$jsondataDonate = json_decode($jsondataDonate, true);
@@ -48,14 +48,8 @@
 					foreach($donate['list'] as $list)
 					{
 						$type = $donate['name'].' ['.$list['price'].' - '.$list['md'].' MD]';
-						if($type==$data['item_name'])
-						{
-							$md = intval(explode(" MD]", explode(" - ", $type)[1])[0]); 
-							$price = intval(explode(" [", explode(" - ", $type)[0])[1]);
-							
-							if($price==$data['payment_amount'])
-								addCoins($data['custom'], $md);
-						}
+						if($type==$data['item_name'] && $list['price']==$data['payment_amount'] && $data['payment_currency']==$list['currency'])
+							addCoins($data['custom'], $list['md']);
 					}
 		}
 	}

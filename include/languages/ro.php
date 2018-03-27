@@ -243,6 +243,10 @@ $lang = array(
 	'redeem-code-info' => 'Crează coduri pe care jucătorii să le poată valorifica.',
 	'code-created' => 'Codul creat este:',
 	'type' => 'Tip',
-	'incorrect-redeem' => 'Codul introdus nu este corect sau a fost deja utilizat.'
+	'incorrect-redeem' => 'Codul introdus nu este corect sau a fost deja utilizat.',
+	
+	//v2.11
+	'reward-players' => 'Recompensează jucatori',
+	'reward-players-info' => 'Trimite un obiect cadou în joc.'
 	);
 ?>

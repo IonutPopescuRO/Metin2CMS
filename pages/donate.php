@@ -10,7 +10,7 @@
 		if(isset($jsondataDonate[$_POST['id']]['list'][$_POST['type']]))
 		{
 			$price = $jsondataDonate[$_POST['id']]['list'][$_POST['type']];
-			$type = $jsondataDonate[$_POST['id']]['name'].' ['.$price['price'].' - '.$price['md'].' MD]';
+			$type = $jsondataDonate[$_POST['id']]['name'].' ['.$price['price'].' '.$jsondataCurrency[$price['currency']]['name'].' - '.$price['md'].' MD]';
 			
 							insert_donate($_SESSION['id'], $_POST['code'], $type);
 		
@@ -47,7 +47,7 @@
 							<div class="col-sm-6">
 								<select class="form-control" name="type">
 								<?php $j=-1; foreach($jsondataDonate[$i]['list'] as $key => $price) { $j++; ?>
-									<option value="<?php print $j; ?>"><?php print $lang['price'].' '.$price['price'].' '.$currency.' - '.$price['md'].' MD'; ?></option>
+									<option value="<?php print $j; ?>"><?php print $lang['price'].' '.$price['price'].' '.$jsondataCurrency[$price['currency']]['name'].' - '.$price['md'].' MD'; ?></option>
 								<?php } ?>
 								</select>
 							</div>
@@ -64,7 +64,7 @@
 							<div class="col-sm-6">
 								<select class="form-control" name="type">
 								<?php $j=-1; foreach($jsondataDonate[$i]['list'] as $key => $price) { $j++; ?>
-									<option value="<?php print $j; ?>"><?php print $lang['price'].' '.$price['price'].' '.$currency.' - '.$price['md'].' MD'; ?></option>
+									<option value="<?php print $j; ?>"><?php print $lang['price'].' '.$price['price'].' '.$jsondataCurrency[$price['currency']]['name'].' - '.$price['md'].' MD'; ?></option>
 								<?php } ?>
 								</select>
 							</div>

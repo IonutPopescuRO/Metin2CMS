@@ -28,7 +28,8 @@ class paginate
 		}
 		catch(PDOException $e)
 		{
-			echo $e->getMessage();
+			//echo $e->getMessage();
+			print 'ERROR';
 		}
 	}
 	
@@ -50,7 +51,8 @@ class paginate
 		}
 		catch(PDOException $e)
 		{
-			echo $e->getMessage();
+			//echo $e->getMessage();
+			print 'ERROR';
 		}
 	}
 	
@@ -67,7 +69,8 @@ class paginate
 		}
 		catch(PDOException $e)
 		{
-			echo $e->getMessage();
+			//echo $e->getMessage();
+			print 'ERROR';
 		}
 	}
 	
@@ -87,7 +90,8 @@ class paginate
 		}
 		catch(PDOException $e)
 		{
-			echo $e->getMessage();
+			//echo $e->getMessage();
+			print 'ERROR';
 		}
 	}
 	
@@ -105,7 +109,8 @@ class paginate
 		}
 		catch(PDOException $e)
 		{
-			echo $e->getMessage();
+			//echo $e->getMessage();
+			print 'ERROR';
 		}
 	}
 	

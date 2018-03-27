@@ -9,9 +9,9 @@
 	
 	//Mail settings
 	$SMTPAuth = true;
-	$SMTPSecure = "tls";
+	$SMTPSecure = "ssl";
 	$EmailHost = "smtp.gmail.com";
-	$emailPort = 587;
+	$emailPort = 465;
 	
 	$email_username = "metin2cms.cf@gmail.com";//gmail account
 	$email_password = "xxxxxx";//gmail password
