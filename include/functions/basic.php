@@ -953,7 +953,7 @@
 		global $database;
 
 		$sth = $database->runQueryPlayer("SELECT account_id FROM player WHERE name LIKE ?");
-		$sth->bindParam(1, $name, PDO::PARAM_STR);
+		$sth->bindParam(1, $name, PDO::PARAM_INT);
 		$sth->execute();
 		$account_id = $sth->fetchAll(PDO::FETCH_COLUMN);
 		if($account_id)
