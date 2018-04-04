@@ -39,31 +39,23 @@
 	{
 		$edited = false;
 		$file = 'update.zip';
-		@file_put_contents($file, file_get_contents($_POST['link']));
+		$download = file_get_contents_curl($_POST['link'],2,10);
+		file_put_contents($file, $download);
 
 		if(file_exists($file)) {
-			$path = pathinfo(realpath($file), PATHINFO_DIRNAME);
-
-			$zip = new ZipArchive;
-			$res = $zip->open($file);
-			if($res === TRUE) {
-				$zip->extractTo($path);
-				$zip->close();
-				
-				if(file_exists($file)) {
-		unlink($file);
-				}
-				
+			$tryUpdate = ZipExtractUpdate();
+			if($tryUpdate[0])
+			{
 				if(!isset($json_languages['languages'][$_POST['install']]))
 				{
-		$json_languages['languages'][$_POST['install']] = $_POST['name'];
-		$edited = true;
+					$json_languages['languages'][$_POST['install']] = $_POST['name'];
+					$edited = true;
 				}
 				
 				if($edited)
 				{
-		$json_new = json_encode($json_languages);
-		file_put_contents('include/db/languages.json', $json_new);
+					$json_new = json_encode($json_languages);
+					file_put_contents('include/db/languages.json', $json_new);
 				}
 			}
 		}

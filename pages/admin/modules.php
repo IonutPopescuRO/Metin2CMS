@@ -12,26 +12,20 @@
 		<center><img src="<?php print $site_url; ?>images/site/updating.gif"></center></br>
 <?php
 		$file = 'update.zip';
-		@file_put_contents($file, file_get_contents($_POST['install']));
+		
+		$download = file_get_contents_curl($_POST['install'],2,10);
+		file_put_contents($file, $download);
 
 		if(file_exists($file)) {
-			$path = pathinfo(realpath($file), PATHINFO_DIRNAME);
-
-			$zip = new ZipArchive;
-			$res = $zip->open($file);
-			if($res === TRUE) {
-				$zip->extractTo($path);
-				$zip->close();
-				
-				if(file_exists($file)) {
-					unlink($file);
-				}
-				
+			$tryUpdate = ZipExtractUpdate();
+			if($tryUpdate[0])
 				print "<script>top.location='".$site_url."admin/modules'</script>";
-			} else {
-				print $failed;
+			else
+			{
+				if(isset($tryUpdate[1]))
+					print $tryUpdate[1];
 			}
-		} else print $failed;
+		}
 	}
 		
 ?>

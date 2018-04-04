@@ -909,7 +909,7 @@
 	function officialVersion()
 	{
 		$officialVersion = '';
-		$officialVersion = @file_get_contents('https://new.metin2cms.cf/v2/last_version.php');
+		$officialVersion = file_get_contents_curl('https://new.metin2cms.cf/v2/last_version.php', 2, 5);
 
 		return $officialVersion;
 	}
@@ -1551,7 +1551,7 @@
 	function getModulesList()
 	{
 		$modules = '';
-		$modules = @file_get_contents('https://new.metin2cms.cf/v2/modules/modules.json');
+		$modules = file_get_contents_curl('https://new.metin2cms.cf/v2/modules/modules.json', 2, 5);
 		
 		$modules = json_decode($modules, TRUE);
 
@@ -1563,7 +1563,7 @@
 	function getThemesList()
 	{
 		$themes = '';
-		$themes = @file_get_contents('https://new.metin2cms.cf/v2/themes/themes.json');
+		$themes = file_get_contents_curl('https://new.metin2cms.cf/v2/themes/themes.json', 2, 5);
 		
 		$themes = json_decode($themes, TRUE);
 
@@ -1603,7 +1603,7 @@
 	function getLanguagesList()
 	{
 		$languages = '';
-		$languages = @file_get_contents('https://new.metin2cms.cf/v2/languages/languages.json');
+		$languages = file_get_contents_curl('https://new.metin2cms.cf/v2/languages/languages.json', 2, 5);
 		
 		$languages = json_decode($languages, TRUE);
 
@@ -2005,5 +2005,75 @@
 		$result = $stmt->fetchAll();
 
 		return $result;
+	}
+	
+	function file_get_contents_curl($url, $retries=5, $time_out=10)
+	{
+		$ua = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.82 Safari/537.36';
+		if (extension_loaded('curl') === true)
+		{
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $url); 
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $time_out);
+			curl_setopt($ch, CURLOPT_USERAGENT, $ua);
+			curl_setopt($ch, CURLOPT_FAILONERROR, TRUE);
+			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+			curl_setopt($ch, CURLOPT_AUTOREFERER, TRUE);
+			curl_setopt($ch, CURLOPT_TIMEOUT, $time_out);
+			curl_setopt($ch, CURLOPT_MAXREDIRS, 5);
+			$result = curl_exec($ch);
+			curl_close($ch);
+		}
+		else
+			$result = file_get_contents($url, false, stream_context_create(array('http' => array('header'=>'Connection: close\r\n'))));
+		
+		if (empty($result) === true)
+		{
+			$result = false;
+			if ($retries >= 1)
+			{
+				sleep(1);
+				return file_get_contents_curl($url, --$retries);
+			}
+		}    
+		return $result;
+	}
+	
+	function ZipExtractUpdate()
+	{
+		$file = 'update.zip';
+		$path = pathinfo(realpath($file), PATHINFO_DIRNAME);
+		
+		if(class_exists('ZipArchive'))
+		{
+			$zip = new ZipArchive;
+			$res = $zip->open($file);
+			if($res === TRUE) {
+				$zip->extractTo($path);
+				$zip->close();
+				
+				if(file_exists($file)) {
+					unlink($file);
+				}
+				
+				return array(1);
+			} else array(0);
+		}
+		else {
+			require_once('include/classes/pclzip.lib.php');
+			$archive = new PclZip($file);
+			
+			if ($archive->extract($path) == 0)
+				array(0, '<div class="alert alert-danger" role="alert">Error: '.$archive->errorInfo(true).'</div>');
+			else {
+				if(file_exists($file)) {
+					unlink($file);
+				}
+				
+				return array(1);
+			}
+		}
+		return array(0);
 	}
 ?>

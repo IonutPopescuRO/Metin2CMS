@@ -11,27 +11,21 @@
 	<center><img src="<?php print $site_url; ?>images/site/updating.gif"></center></br>
 <?php
 	$file = 'update.zip';
-	@file_put_contents($file, file_get_contents('https://new.metin2cms.cf/v2/'.$lastVersion.'.zip'));
+	$download = file_get_contents_curl('https://new.metin2cms.cf/v2/'.$lastVersion.'.zip',3,60);
+	file_put_contents($file, $download);
 
 	if(file_exists($file)) {
-		$path = pathinfo(realpath($file), PATHINFO_DIRNAME);
-
-		$zip = new ZipArchive;
-		$res = $zip->open($file);
-		if($res === TRUE) {
-			$zip->extractTo($path);
-			$zip->close();
-			
-			if(file_exists($file)) {
-				unlink($file);
-			}
-			
+		$tryUpdate = ZipExtractUpdate();
+		if($tryUpdate[0])
 			print "<script>top.location='".$site_url."admin'</script>";
-		} else {
+		else
+		{
 			print $failed;
+			if(isset($tryUpdate[1]))
+				print $tryUpdate[1];
 		}
-	} else print $failed;
-	
+	} else
+		print $failed;
 } else { ?>
 	<div class="alert alert-info" role="alert">
 		<h4 class="alert-heading"><?php print $lang['update-available']; ?>!</h4>
@@ -46,7 +40,7 @@
 		}
 	} else 
 	{
-		$helloworld = @file_get_contents('http://metin2cms.cf/salut.php?lang='.$language_code);
+		$helloworld = file_get_contents_curl('http://metin2cms.cf/salut.php?lang='.$language_code, 2, 5);
 		if($helloworld)
 			print '<div class="alert alert-info alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>'.$helloworld.'</div>';
 		else if(!$lastVersion)
