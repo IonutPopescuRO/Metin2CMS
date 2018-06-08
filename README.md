@@ -60,11 +60,16 @@ INSTALATION
 ```
 
 ### Preview
-![screenshot](https://i.imgur.com/PMnWEUy.png)
-![screenshot](https://i.imgur.com/y4ivCJu.png)
-![screenshot](https://i.imgur.com/GZgQ2tR.png)
-![screenshot](https://i.imgur.com/1rRl1a5.png)
-![screenshot](https://i.imgur.com/4884Z6K.png)
-![screenshot](https://i.imgur.com/PC7CL34.png)
-![screenshot](https://i.imgur.com/YSoe3CM.png)
-![screenshot](https://i.imgur.com/J3zrrYK.png)
+<details><summary>CLICK ME</summary>
+<p>
+	<img src="https://i.imgur.com/EAR2Jc1.png"></img>
+	<img src="https://i.imgur.com/PMnWEUy.png"></img>
+	<img src="https://i.imgur.com/y4ivCJu.png"></img>
+	<img src="https://i.imgur.com/GZgQ2tR.png"></img>
+	<img src="https://i.imgur.com/1rRl1a5.png"></img>
+	<img src="https://i.imgur.com/4884Z6K.png"></img>
+	<img src="https://i.imgur.com/PC7CL34.png"></img>
+	<img src="https://i.imgur.com/YSoe3CM.png"></img>
+	<img src="https://i.imgur.com/J3zrrYK.png"></img>
+</p>
+</details>
