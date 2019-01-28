@@ -26,6 +26,7 @@ The platform is available in 10 languages:
   - [pt-BR] 	Português (BR) 	
   - [es] 	Español 	
   - [it] 	Italiano
+  - [tr] 	Türk
   - [hu] 	Magyar 	
   - [de] 	Deutsch
   - [el] 	Ελληνικά
