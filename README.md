@@ -3,6 +3,8 @@ Metin2CMS
 [![N|Solid](http://i.imgur.com/dS8151Q.png)](https://metin2cms.cf/v2)
 
 [![Github All Releases](https://img.shields.io/github/downloads/IonutPopescuRO/Metin2CMS/total.svg)]()
+[![GitHub release](https://img.shields.io/github/release/IonutPopescuRO/Metin2CMS.svg?color=%23f17e3f)]()
+[![License](https://img.shields.io/github/license/IonutPopescuRO/Metin2CMS.svg?color=%230d7ebf)]()
 
 The latest version of the CMS. This CMS is Open-Source and is accompanied by updates. To update to a newer version, enter in administrator panel.
 
