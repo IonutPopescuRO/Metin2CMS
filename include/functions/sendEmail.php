@@ -4,12 +4,6 @@
 	require 'include/mailer/Exception.php';
 	use PHPMailer\PHPMailer\PHPMailer;
 	
-	$email_name = 'noreplay';
-	
-	$site_name = $_SERVER['SERVER_NAME'];
-	if($site_name=='localhost' || $site_name=='127.0.0.1')
-		$site_name = 'metin2cms.cf';
-	
 	$mail             = new PHPMailer();
 	$mail->IsSMTP();
 	$mail->SMTPDebug  = 0;							// enables SMTP debug information (for testing)
@@ -24,8 +18,8 @@
 	$mail->Username   = $email_username;			// GMAIL username
 	$mail->Password   = $email_password;			// GMAIL password
 	
-	$mail->SetFrom($email_name.'@'.$site_name, $site_title);
-	$mail->AddReplyTo($email_name."@".$site_name, $site_title);
+	$mail->SetFrom($email_username, $site_title);
+	$mail->AddReplyTo($email_username, $site_title);
 
 	$mail->Subject    = $subject;
 
