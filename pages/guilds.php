@@ -10,7 +10,7 @@
 		<form action="" method="POST">
 			<div class="row">
 				<div class="col-lg-9">
-					<input type="text" name="search" class="form-control" placeholder="<?php print $lang['guild']; ?>" value="<?php if(isset($search)) print $search; ?>">
+					<input type="text" name="search" class="form-control" placeholder="<?php print $lang['guild']; ?>" value="<?php if(isset($search)) print htmlentities($search); ?>">
 				</div>
 				<div class="col-lg-3">
 					<button type="submit" class="btn btn-primary"><i class="fa fa-search fa-1" aria-hidden="true"></i> <?php print $lang['search']; ?></button>
