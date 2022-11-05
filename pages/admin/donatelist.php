@@ -16,7 +16,7 @@
 		?>
 			<tr>
 				<td><?php print getAccountName($donate['account_id']); ?></td>
-				<td><?php print $donate['code']; ?></td>
+				<td><?php print htmlentities($donate['code']); ?></td>
 				<td><?php print $donate['type']; ?></td>
 				<td>
 					<form action="" method="post">
