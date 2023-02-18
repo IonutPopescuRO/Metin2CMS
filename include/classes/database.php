@@ -11,7 +11,7 @@ class Database
 		try
 		{
 			if($sqlite==null)
-				$this->conn = new PDO("mysql:host=" . $host . ";dbname=" . $db_name, $user, $password);
+				$this->conn = new PDO("mysql:host=" . $host . ";dbname=" . $db_name, $user, $password, [PDO::ATTR_TIMEOUT => 5, PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"]);
 			else
 			{
 				$this->conn = new PDO("sqlite:include/db/site.db");
