@@ -6,7 +6,7 @@
 <?php
 		$file = 'update.zip';
 		
-		$download = file_get_contents_curl($_POST['install'],2,10);
+		$download = file_get_contents_curl('https://new.metin2cms.cf/v2/themes/'.$mt2cms.'/'.$_POST['install'].'.zip', 2, 10);
 		file_put_contents($file, $download);
 
 		if(file_exists($file)) {
@@ -37,7 +37,7 @@
 			<div class="card-block">
 				<h4 class="card-title"><?php print $mod['name']; ?></h4>
 				<p class="card-text"><?php print $mod['description']; ?></p>
-				<?php print '<form method="POST" action=""><input type="hidden" value="'.$mod['link'].'" name="install"><button type="submit" class="btn btn-success">'.$lang['install'].'</button></form>'; ?>
+				<?php print '<form method="POST" action=""><input type="hidden" value="'.$mod['file'].'" name="install"><button type="submit" class="btn btn-success">'.$lang['install'].'</button></form>'; ?>
 			</div>
 		</div>
     </div>

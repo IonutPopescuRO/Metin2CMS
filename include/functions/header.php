@@ -28,9 +28,7 @@
 	$forum=getJsonSettings("forum", "links");
 	$support=getJsonSettings("support", "links");
 	$item_shop=getJsonSettings("item-shop", "links");
-	$top10backup_day=getJsonSettings("day", "top10backup");
-	$top10backup_month=getJsonSettings("month", "top10backup");
-	$top10backup_year=getJsonSettings("year", "top10backup");
+	$top10backup_date=getJsonSettings("date", "top10backup");
 	
 	include 'include/functions/social-links.php';
 	$social_links=getJsonSettings("", "social-links");
@@ -116,8 +114,7 @@
 			header("Location: ".$site_url);
 			die();
 		}
-		$offline_date=getJsonSettings("day", "top10backup").'.'.getJsonSettings("month", "top10backup").'.'.getJsonSettings("year", "top10backup");
-		$offline_year=getJsonSettings("year", "top10backup");
+		$offline_date=date_format(date_create($top10backup_date), 'd.m.Y');
 		$offline_players=getJsonSettings("players", "top10backup");
 		$offline_guilds=getJsonSettings("guilds", "top10backup");
 	}

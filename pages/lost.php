@@ -82,7 +82,7 @@
 							}
 						}
 					}
-					require 'include/captcha/simple-php-captcha.php';
+					require 'include/captcha/simple.php';
 					$_SESSION['captcha_lost'] = simple_php_captcha();
 					
 				if($message!=11) {
@@ -110,7 +110,7 @@
 							<td><input class="form-control" name="email" pattern=".{7,64}" maxlength="64" placeholder="<?php print $lang['email-address']; ?>" required="" title="Maxim 64 caractere." type="email"></td>
 						</tr>
 						<tr>
-							<td><?php print '<img src='.$_SESSION['captcha_lost']['image_src'].'>'; ?></td>
+							<td><?php print '<img src='.$site_url.'include/captcha/simple.php'.$_SESSION['captcha_lost']['image_src'].'>'; ?></td>
 							<td><input style="height:70px; font-size: 30px;" class="form-control" name="captcha" pattern=".{4,6}" maxlength="5" placeholder="<?php print $lang['captcha-code']; ?>" required="" title="Maxim 15 caractere." type="text"></td>
 						</tr>
 						<?php } ?>

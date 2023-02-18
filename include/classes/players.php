@@ -46,7 +46,7 @@ class paginate
 			<tr>
 				<th scope="row"><?php print $number; ?></th>
 				<td><?php print $row['name']; ?></td>
-				<td><img src="<?php print $site_url; ?>images/empire/<?php print $empire=get_player_empire($row['account_id']); ?>.jpg" alt="<?php print emire_name($empire); ?>" title="<?php print emire_name($empire); ?>"></td>
+				<td><img src="<?php print $site_url; ?>images/empire/<?php print $empire=get_player_empire($row['account_id']); ?>.jpg" alt="<?php print empire_name($empire); ?>"></td>
 				<td class="level-table"><?php print $row['level']; ?></td>
 				<td class="exp-table"><?php print $row['exp']; ?></td>
 			</tr>

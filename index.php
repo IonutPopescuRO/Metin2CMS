@@ -3,11 +3,9 @@
 	include 'include/functions/header.php';
 ?>
 <!DOCTYPE html>
-<html lang="<?php print $language_code; ?>">
-<!--<![endif]-->
+<html lang="<?php print $language_code; ?>"<?php if(in_array($language_code, $rtl)) print ' dir="rtl"'; ?>>
 
 <head>
-
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="UTF-8" />
 
@@ -135,7 +133,7 @@
 													?>
 							</div>
 							<div class="col-md-4">
-								<p style="text-align: right">Powered by <a href="https://metin2cms.cf/">Metin2CMS <?php print $mt2cms; ?></a></p>
+								<p style="text-align: right">Powered by <a href="https://metin2cms.cf/" target="_blank">Metin2CMS <?php print $mt2cms; ?></a></p>
 							</div>
 						</div>
 					</p>
@@ -144,13 +142,10 @@
         </div>
     </div>
 
-    <div id="fb-root"></div>
-	
 	<script type="text/javascript" src="<?php print $site_url; ?>js/jquery-2.2.4.min.js"></script>
 	<?php include 'include/functions/footer.php'; ?>
 	<script src="<?php print $site_url; ?>js/tether.min.js"></script>
     <script src="<?php print $site_url; ?>js/bootstrap.min.js"></script>
-
 </body>
 
 </html>

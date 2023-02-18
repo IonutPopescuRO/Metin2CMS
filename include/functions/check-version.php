@@ -1,10 +1,17 @@
 <?php
-	$lastVersion = officialVersion();
+	$apidata = file_get_contents('include/db/api.json');
+	$apidata = json_decode($apidata,true);
 
-	$failed = '<div class="alert alert-danger" role="alert">'.$lang['not-updated'].': <a href="https://new.metin2cms.cf/v2/'.$lastVersion.'.zip" class="tag tag-success">'.$lang['update'].'</a></div>';
-	
-	if(checkUpdate($lastVersion))
+	$available_update = false;
+	if(!isset($apidata['ad']) || $apidata['ad']['last_update'] + 60*60*24 < time()) {
+		$lastVersion = officialVersion();
+		$available_update = checkUpdate($lastVersion);
+	}
+
+	if($available_update)
 	{
+		$failed = '<div class="alert alert-danger" role="alert">'.$lang['not-updated'].': <a href="https://new.metin2cms.cf/v2/'.$lastVersion.'.zip" class="tag tag-success">'.$lang['update'].'</a></div>';
+
 		if(isset($_POST['update']))
 		{
 ?>
@@ -38,12 +45,22 @@
 	</div>
 <?php
 		}
-	} else 
-	{
-		$helloworld = file_get_contents_curl('http://metin2cms.cf/salut.php?lang='.$language_code, 2, 5);
+	} else {
+		if(!isset($apidata['ad']) || $apidata['ad']['last_update'] + 60*60*24 < time()) {
+			$helloworld = file_get_contents_curl('https://metin2cms.cf/salut.php?lang='.$language_code, 2, 5);
+			if($helloworld)
+				$apidata['ad']['content'] = $helloworld;
+			else $helloworld = $apidata['ad']['content'];
+
+			$apidata['ad']['last_update'] = time();
+
+			$jsondata = json_encode($apidata);
+			file_put_contents('include/db/api.json', $jsondata);
+		} else $helloworld = $apidata['ad']['content'];
+
 		if($helloworld)
 			print '<div class="alert alert-info alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>'.$helloworld.'</div>';
-		else if(!$lastVersion)
+		else
 			print '<div class="alert alert-danger fade in" role="alert">'.$lang['https-get-contents-error'].' <a href="https://piwik.org/faq/troubleshooting/faq_177/" target="_blank">Piwik</a> | <a href="https://stackoverflow.com/search?q=Unable+to+find+the+wrapper+%22https%22" target="_blank">StackOverflow</a></div>';
 	}
 ?>

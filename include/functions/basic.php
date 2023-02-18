@@ -1,8 +1,7 @@
 <?php
 	function redirect($url)
 	{
-		global $database;
-		global $site_url;
+		global $database, $site_url;
 		
 		$pages = array("administration", "characters", "password", "email", "vote4coins", "donate", "referrals");
 		if (in_array($url, $pages) && !$database->is_loggedin())
@@ -74,18 +73,17 @@
 		$stmt->execute();
 		$result=$stmt->fetch(PDO::FETCH_ASSOC);
 		
-		return $result['empire'];
+		if($result)
+			return $result['empire'];
+		return 3;
 	}
 
-	function top10players()
+	function topPlayers($limit=10)
 	{
 		global $database;
 		
-		$banned_ids = getBannedAccounts();
-		if($banned_ids)
-			$stmt = $database->runQueryPlayer("SELECT id, name, account_id FROM player WHERE name NOT LIKE '[%]%' AND account_id NOT IN (".$banned_ids.") ORDER BY level DESC, exp DESC, playtime DESC, name ASC limit 10");
-		else
-			$stmt = $database->runQueryPlayer("SELECT id, name, account_id FROM player WHERE name NOT LIKE '[%]%' ORDER BY level DESC, exp DESC, playtime DESC, name ASC limit 10");
+		$stmt = $database->runQueryPlayer("SELECT id, name, account_id FROM player WHERE name NOT LIKE '[%]%' ORDER BY level DESC, exp DESC, playtime DESC, name ASC limit ?");
+		$stmt->bindParam(1, $limit, PDO::PARAM_INT);
 		$stmt->execute();
 		$top = $stmt->fetchAll();
 		
@@ -101,7 +99,9 @@
 		$stmt->execute();
 		$result=$stmt->fetch(PDO::FETCH_ASSOC);
 		
-		return $result['empire'];
+		if($result)
+			return $result['empire'];
+		return 3;
 	}
 
 	function getPlayerName($id)
@@ -212,38 +212,19 @@
 		return $result['password'];
 	}
 
-	function top10guilds()
+	function topGuilds($limit=10)
 	{
 		global $database;
 		
-		$stmt = $database->runQueryPlayer("SELECT name, master FROM guild WHERE name NOT LIKE '[%]%' ORDER BY level DESC, ladder_point DESC, exp DESC, name ASC limit 10");
+		$stmt = $database->runQueryPlayer("SELECT name, master FROM guild WHERE name NOT LIKE '[%]%' ORDER BY level DESC, ladder_point DESC, exp DESC, name ASC limit ?");
+		$stmt->bindParam(1, $limit, PDO::PARAM_INT);
 		$stmt->execute();
 		$top = $stmt->fetchAll();
 		
 		return $top;
 	}
 
-	function getBannedAccounts()
-	{
-		global $database;
-		
-		$status = 'BLOCK';
-		
-		$stmt = $database->runQueryAccount("SELECT id FROM account WHERE status=?");
-		$stmt->bindParam(1, $status, PDO::PARAM_STR);
-		$stmt->execute();
-		$banned = $stmt->fetchAll();
-		
-		$banned_array = array();
-		foreach($banned as $id)
-			$banned_array[] = $id['id'].' ';
-		
-		$ids = join(',',$banned_array);
-		
-		return $ids;
-	}
-
-	function emire_name($id)
+	function empire_name($id)
 	{
 		switch ($id) {
 			case 1://red
@@ -329,8 +310,6 @@
 	{
 		global $database;
 		
-		$banned_ids = getBannedAccounts();
-
 		$ranking = array();
 		
 		foreach($list as $player)
@@ -338,12 +317,10 @@
 			$sql =  "SELECT r.position FROM player u 
 						LEFT JOIN (SELECT r.*, @rownum := @rownum + 1 AS position
 						FROM player r CROSS JOIN
-						(SELECT @rownum := 0) r WHERE r.name NOT LIKE '[%]%'";
-			if($banned_ids)
-				$sql.=" AND account_id NOT IN (".$banned_ids.") ";
-			$sql.= "ORDER BY r.level desc, r.exp DESC, r.name ASC LIMIT 1000) r
-					ON r.id = u.id
-					WHERE u.id = :id";
+						(SELECT @rownum := 0) r WHERE r.name NOT LIKE '[%]%'
+						ORDER BY r.level desc, r.exp DESC, r.name ASC LIMIT 1000) r
+						ON r.id = u.id
+						WHERE u.id = :id";
 			
 			$stmt = $database->runQueryPlayer($sql);
 			$stmt->bindParam(':id', $player['id'], PDO::PARAM_INT);
@@ -488,7 +465,6 @@
 		$stmt = $database->runQueryAccount("UPDATE account SET email=new_email, new_email='' WHERE id = ?");
 		$stmt->bindParam(1, $_SESSION['id'], PDO::PARAM_INT);
 		$stmt->execute();
-		print $_SESSION['id'];
 	}
 
 	function update_new_email($id, $email)
@@ -924,8 +900,8 @@
 			$lastVersion=210;
 		
 		if($lastVersion && $lastVersion!='' && $lastVersion > $version)
-			return 1;
-		return 0;
+			return true;
+		return false;
 	}
 	
 	function check_item_column($name)
@@ -1095,11 +1071,11 @@
 		$stmt->bindParam(1, $id, PDO::PARAM_INT);
 		$stmt->bindParam(2,  $_SESSION['id'], PDO::PARAM_INT);
 		$stmt->execute();
-		$check = $stmt->fetchAll();
+		$check = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 		if(count($check))
 			return true;
-		else return false;
+		return false;
 	}
 	
 	function insert_vote4coins($id, $ip)
@@ -1110,10 +1086,26 @@
 		$account = $_SESSION['id'];
 		
 		$stmt = $database->runQuerySqlite("INSERT INTO vote4coins (site, account_id, account_ip, date) VALUES (:site, :account_id, :account_ip, :date)");
-		$stmt->execute(array(':date'=>$date, ':account_id'=>$account, ':account_ip'=>$ip, ':site'=>$id));
+		$stmt->execute([':date'=>$date, ':account_id'=>$account, ':account_ip'=>$ip, ':site'=>$id]);
 	}
 	
 	function check_date_vote4coins($id, $ip)
+	{
+		global $database;
+		
+		$stmt = $database->runQuerySqlite("SELECT date FROM vote4coins WHERE site = ? AND (account_ip = ? OR account_id = ?) ORDER BY date DESC LIMIT 1");
+		$stmt->bindParam(1, $id, PDO::PARAM_INT);
+		$stmt->bindParam(2, $ip, PDO::PARAM_STR);
+		$stmt->bindParam(3, $_SESSION['id'], PDO::PARAM_INT);
+		$stmt->execute();
+		$result = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+		if($result)
+			return $result[0];
+		return "0000-00-00 00:00";
+	}
+
+	function check_date_vote4coins_ip($id, $ip)
 	{
 		global $database;
 		
@@ -1122,35 +1114,10 @@
 		$stmt->bindParam(2, $ip, PDO::PARAM_STR);
 		$stmt->execute();
 		$result = $stmt->fetchAll(PDO::FETCH_COLUMN);
-		
-		if($result)
-			return $result[0];
-		else return "0000-00-00 00:00";
-	}
-	
-	function check_date_vote4coins_account($id)
-	{
-		global $database;
-		
-		$stmt = $database->runQuerySqlite("SELECT date FROM vote4coins WHERE site = ? AND account_id = ?");
-		$stmt->bindParam(1, $id, PDO::PARAM_INT);
-		$stmt->bindParam(2, $_SESSION['id'], PDO::PARAM_INT);
-		$stmt->execute();
-		$result = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
 		if($result)
 			return $result[0];
-		else return "0000-00-00 00:00";
-	}
-	
-	function get_account_ip() {
-		$ipaddress = getenv('HTTP_CLIENT_IP')?:
-			getenv('HTTP_X_FORWARDED_FOR')?:
-			getenv('HTTP_X_FORWARDED')?:
-			getenv('HTTP_FORWARDED_FOR')?:
-			getenv('HTTP_FORWARDED')?:
-			getenv('REMOTE_ADDR');
-		return $ipaddress;
+		return "0000-00-00 00:00";
 	}
 	
 	function sqlite_check_table($table)
@@ -1483,13 +1450,11 @@
 	{
 		global $database;
 
-		$pdo_stmt = $database->runQueryPlayer('SELECT * from '.$table);
+		$pdo_stmt = $database->runQueryPlayer('SELECT * from '.$table. ' LIMIT 1');
 		$pdo_stmt->execute();
 				
 		foreach(range(0, $pdo_stmt->columnCount() - 1) as $column_index)
-		{
 			$meta[] = $pdo_stmt->getColumnMeta($column_index);
-		}
 
 		return $meta;
 	}
@@ -1503,6 +1468,7 @@
 			'LONG' => 'int',
 			'SHORT' => 'int',
 			'TINY' => 'int',
+			'INT24' => 'int',
 			'DATETIME' => 'datetime',
 			'DATE' => 'date',
 			'DOUBLE' => 'real',
@@ -1572,7 +1538,7 @@
 		else return array();
 	}
 	
-	//2.7
+	//2.12
 	function fix_account_columns()
 	{
 		global $database;
@@ -1584,10 +1550,10 @@
 		
 		$fix = array(	"coins" => "ALTER TABLE account ADD coins int(20) NOT NULL DEFAULT 0",
 						"jcoins" => "ALTER TABLE account ADD jcoins int(20) NOT NULL DEFAULT 0", 
-						"deletion_token" => "ALTER TABLE account ADD deletion_token varchar(40) NOT NULL",
-						"passlost_token" => "ALTER TABLE account ADD passlost_token varchar(40) NOT NULL",
-						"email_token" => "ALTER TABLE account ADD email_token varchar(40) NOT NULL",
-						"new_email" => "ALTER TABLE account ADD new_email varchar(64) NOT NULL");
+						"deletion_token" => "ALTER TABLE account ADD deletion_token varchar(40) NOT NULL DEFAULT ''",
+						"passlost_token" => "ALTER TABLE account ADD passlost_token varchar(40) NOT NULL DEFAULT ''",
+						"email_token" => "ALTER TABLE account ADD email_token varchar(40) NOT NULL DEFAULT ''",
+						"new_email" => "ALTER TABLE account ADD new_email varchar(64) NOT NULL DEFAULT ''");
 		
 		foreach($fix as $column => $query)
 			if(!in_array($column, $columns))
@@ -2075,5 +2041,26 @@
 			}
 		}
 		return array(0);
+	}
+
+	//v2.12
+	function getTimeUntilNextVote($date_diff)
+	{
+		global $lang;
+		
+		$time_vote            = [];
+		$time_vote['days']    = $date_diff->d;
+		$time_vote['hours']   = $date_diff->h;
+		$time_vote['minutes'] = $date_diff->i;
+		$already_voted        = '';
+		
+		foreach ($time_vote as $key => $time)
+			if($time)
+				$already_voted .= $time . ' ' . $lang[$key] . ' ';
+		
+		$already_voted = substr($already_voted, 0, -1);
+		$already_voted .= '.';
+		
+		return $already_voted;
 	}
 ?>

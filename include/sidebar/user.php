@@ -27,7 +27,7 @@
 			<?php } else { ?>
 			<div class="list-group">
 				<?php if($web_admin) { ?>
-				<a href="<?php print $site_url; ?>admin" class="list-group-item list-group-item-action"><?php print $lang['administration']; ?><?php if($web_admin>=9 && checkUpdate(officialVersion())) print ' <span class="tag tag-info tag-pill float-xs-right">'.$lang['update-available'].'</span>'; ?></a>
+				<a href="<?php print $site_url; ?>admin" class="list-group-item list-group-item-action"><?php print $lang['administration']; ?></a>
 				<?php 
 					if($web_admin>=$jsondataPrivileges['donate']) {
 						$count_donations = count(get_donations());

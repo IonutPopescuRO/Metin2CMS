@@ -73,7 +73,7 @@ class USER
 		try
 		{
 			$password = getHashPassword($password);
-			$social_id = generateSocialID();
+			$social_id = rand(1000000, 9999999); // updated in v2.12
 			$status = "OK";
 			
 			$stmt = $this->account->prepare("INSERT INTO account(login, password, social_id, email, create_time, status) 

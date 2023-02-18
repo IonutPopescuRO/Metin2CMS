@@ -5,7 +5,7 @@
 				<input type="text" class="form-control" name="site_name" placeholder="Site">
 			</div>
 			<div class="col-sm-8">
-				<input type="url" class="form-control" name="site_link" placeholder="Link" value="http://">
+				<input type="url" class="form-control" name="site_link" placeholder="Link" value="https://">
 			</div>
 		</div>
 		<div class="form-group row">

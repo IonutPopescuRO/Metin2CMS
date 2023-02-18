@@ -35,11 +35,11 @@
 		
 		header("Location: ".$site_url.'admin/language');
 		die();
-	} else if(isset($_POST['install']) && isset($_POST['name']) && isset($_POST['link']))
+	} else if(isset($_POST['install']) && isset($_POST['name']))
 	{
 		$edited = false;
 		$file = 'update.zip';
-		$download = file_get_contents_curl($_POST['link'],2,10);
+		$download = file_get_contents_curl('https://new.metin2cms.cf/v2/languages/'.$_POST['install'].'.zip', 2, 10);
 		file_put_contents($file, $download);
 
 		if(file_exists($file)) {

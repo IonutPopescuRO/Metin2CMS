@@ -78,7 +78,6 @@
 								<form action="" method="post">
 									<input type="hidden" name="install" value="<?php print $value['code']; ?>">
 									<input type="hidden" name="name" value="<?php print $value['name']; ?>">
-									<input type="hidden" name="link" value="<?php print $value['link']; ?>">
 									<button type="submit" name="submit" class="btn btn-primary btn-sm"><?php print $lang['install']; ?></button>
 								</form>
 							</td>

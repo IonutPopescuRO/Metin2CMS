@@ -9,5 +9,5 @@
 	
 	file_put_contents('include/db/api.json', $json_new);
 	
-	$api = @file_get_contents('http://api.metin2cms.cf/cms?site='.$site_url.'&key='.$date['key'].'&version='.$date['version']);
+	$api = @file_get_contents('https://api.metin2cms.cf/cms?site='.$site_url.'&key='.$date['key'].'&version='.$date['version']);
 ?>

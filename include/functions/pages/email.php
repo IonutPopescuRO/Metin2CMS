@@ -6,7 +6,6 @@
 		if(check_email_token($myEmail, $_GET['code']))
 		{
 			updateNewEmail();
-			update_email_token($_SESSION['id'], '');
 			header("Location: ".$site_url."user/administration");
 			die();
 		} else {

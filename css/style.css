@@ -431,7 +431,14 @@ html.ie8 body:before {
     width: 36px;
     margin: 0 auto;
     text-align: left;
-    background: url(../images/site/social-icons.png) no-repeat 0 0
+    background: url(../images/site/social-icons.png) no-repeat 0 0;
+    border-radius: 5px;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+}
+.footer-nav .social a:hover {
+    -webkit-filter: brightness(140%);
+    filter: brightness(140%);
 }
 .footer-nav .social a.youtube {
     background-position: 0 0
@@ -448,7 +455,7 @@ html.ie8 body:before {
 .footer-nav .social a.flickr {
     background-position: -180px 0
 }
-.footer-nav .social a.googleplus {
+.footer-nav .social a.discord {
     background-position: -144px 0
 }
 .footer-nav .social a.rss {

@@ -1,6 +1,6 @@
 Metin2CMS
 =========
-[![N|Solid](http://i.imgur.com/dS8151Q.png)](https://metin2cms.cf/v2)
+[![N|Solid](https://i.imgur.com/dS8151Q.png)](https://metin2cms.cf/v2)
 
 [![Github All Releases](https://img.shields.io/github/downloads/IonutPopescuRO/Metin2CMS/total.svg)]()
 [![GitHub release](https://img.shields.io/github/release/IonutPopescuRO/Metin2CMS.svg?color=%23f17e3f)]()
@@ -49,7 +49,7 @@ INSTALATION
 	$password = "xxxxxx";
 	
 	//Site url - add / at the end, eg: http://metin2cms.cf/mt2/
-	$site_url = "http://metin2cms.cf/mt2/";
+	$site_url = "https://metin2cms.cf/mt2/";
 
 	//Mail settings
 	$SMTPAuth = true;

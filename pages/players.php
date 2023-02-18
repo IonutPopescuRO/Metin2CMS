@@ -40,22 +40,15 @@
 		</thead>
 		<tbody>
 			<?php 
-				$banned_ids = getBannedAccounts();
 				$records_per_page=10;
 				
 				if(isset($search))
 				{
-					if($banned_ids)
-						$query = "SELECT id, name, account_id, level, exp FROM player WHERE name NOT LIKE '[%]%' AND account_id NOT IN (".$banned_ids.") AND name LIKE :search ORDER BY level DESC, exp DESC, playtime DESC, name ASC";
-					else
-						$query = "SELECT id, name, account_id, level, exp FROM player WHERE name NOT LIKE '[%]%' AND name LIKE :search ORDER BY level DESC, exp DESC, playtime DESC, name ASC";
+					$query = "SELECT id, name, account_id, level, exp FROM player WHERE name NOT LIKE '[%]%' AND name LIKE :search ORDER BY level DESC, exp DESC, playtime DESC, name ASC";
 					$newquery = $paginate->paging($query,$records_per_page);
 					$paginate->dataview($newquery, $search);
 				} else {
-					if($banned_ids)
-						$query = "SELECT id, name, account_id, level, exp FROM player WHERE name NOT LIKE '[%]%' AND account_id NOT IN (".$banned_ids.") ORDER BY level DESC, exp DESC, playtime DESC, name ASC";
-					else
-						$query = "SELECT id, name, account_id, level, exp FROM player WHERE name NOT LIKE '[%]%' ORDER BY level DESC, exp DESC, playtime DESC, name ASC";
+					$query = "SELECT id, name, account_id, level, exp FROM player WHERE name NOT LIKE '[%]%' ORDER BY level DESC, exp DESC, playtime DESC, name ASC";
 					$newquery = $paginate->paging($query,$records_per_page);
 					$paginate->dataview($newquery);
 				}

@@ -29,7 +29,7 @@
 							<?php
 							if(!$offline) {
 								$top = array();
-								$top = top10players();
+								$top = topPlayers();
 								
 								$i=1;
 								
@@ -40,7 +40,7 @@
 								<td></td>
 								<th scope="row"><strong><?php print $i++; ?></strong></th>
 								<td><?php print $player['name']; ?></td>
-								<td><img src="<?php print $site_url; ?>images/empire/<?php print $empire=get_player_empire($player['account_id']); ?>.jpg" alt="<?php print emire_name($empire); ?>" title="<?php print emire_name($empire); ?>"></td>
+								<td><img src="<?php print $site_url; ?>images/empire/<?php print $empire=get_player_empire($player['account_id']); ?>.jpg" alt="<?php print empire_name($empire); ?>"></td>
 							</tr>
 							<?php }
 							} else print $offline_players;
@@ -68,7 +68,7 @@
 							<?php
 							if(!$offline) {
 								$top = array();
-								$top = top10guilds();
+								$top = topGuilds();
 								
 								$i=1;
 								
@@ -79,7 +79,7 @@
 								<td></td>
 								<th scope="row"><strong><?php print $i++; ?></strong></th>
 								<td><?php print $guild['name']; ?></td>
-								<td><img src="<?php print $site_url; ?>images/empire/<?php print $empire=get_guild_empire($guild['master']); ?>.jpg" alt="<?php print emire_name($empire); ?>" title="<?php print emire_name($empire); ?>"/></td>
+								<td><img src="<?php print $site_url; ?>images/empire/<?php print $empire=get_guild_empire($guild['master']); ?>.jpg" alt="<?php print empire_name($empire); ?>"/></td>
 							</tr>
 							<?php }
 							} else print $offline_guilds;

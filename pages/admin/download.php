@@ -5,7 +5,7 @@
 				<input type="text" class="form-control" name="download_server" placeholder="Server">
 			</div>
 			<div class="col-sm-8">
-				<input type="url" class="form-control" name="download_link" placeholder="Link" value="http://">
+				<input type="url" class="form-control" name="download_link" placeholder="Link" value="https://">
 			</div>
 		</div>
 

@@ -11,7 +11,7 @@
 				<?php
 					include 'include/functions/register.php';
 					
-					require 'include/captcha/simple-php-captcha.php';
+					require 'include/captcha/simple.php';
 					$_SESSION['captcha'] = simple_php_captcha();
 				?>
 				<table class="table table-hover">
@@ -40,7 +40,7 @@
 							</td>
 						</tr>
 						<tr>
-							<td><?php print '<img src='.$_SESSION['captcha']['image_src'].'>'; ?></td>
+							<td><?php print '<img src='.$site_url.'include/captcha/simple.php'.$_SESSION['captcha']['image_src'].'>'; ?></td>
 							<td><input style="height:70px; font-size: 30px;" class="form-control" name="captcha" pattern=".{4,6}" maxlength="5" placeholder="<?php print $lang['captcha-code']; ?>" required="" type="text"></td>
 						</tr>
 					</tbody>

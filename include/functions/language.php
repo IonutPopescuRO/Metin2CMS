@@ -1,6 +1,7 @@
 <?php
 	$json_languages = file_get_contents('include/db/languages.json');
 	$json_languages = json_decode($json_languages,true);
+	$rtl = ['ar', 'arc', 'dv', 'fa', 'ha', 'he', 'khw', 'ks', 'ku', 'ps', 'ur', 'yi'];
 		
 	if(isSet($_GET['lang']))
 		$lang = $_GET['lang'];
